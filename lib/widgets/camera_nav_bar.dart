@@ -1,0 +1,55 @@
+import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+
+class CameraNavBar extends StatefulWidget {
+  const CameraNavBar({super.key});
+
+  @override
+  State<CameraNavBar> createState() => _CameraNavBarState();
+}
+
+class _CameraNavBarState extends State<CameraNavBar> {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+      height: 58,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Container(
+            width: 58,
+            height: 58,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(30),
+              boxShadow: const [
+                BoxShadow(
+                  color: Colors.black26,
+                  blurRadius: 10,
+                  spreadRadius: 1,
+                  offset: Offset(0, 4),
+                ),
+              ],
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                IconButton(
+                  icon: Icon(
+                    Icons.camera_alt,
+                    size: 36,
+                    color: Colors.black,
+                  ),
+                  onPressed: () {
+                      // context.go(route); // Navigate only if not already selected
+                  },
+                )
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
