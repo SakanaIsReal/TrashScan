@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:trashscan/widgets/camera_nav_bar.dart';
 import '../widgets/custom_app_bar.dart';
-import '../widgets/bottom_nav_bar.dart';
-import '../widgets/camera_nav_bar.dart';
+// import '../widgets/bottom_nav_bar.dart';
+// import '../widgets/camera_nav_bar.dart';
 import '../widgets/custom_back_button.dart';
 
 class ScanScreen extends StatefulWidget {

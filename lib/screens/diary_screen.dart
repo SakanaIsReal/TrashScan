@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../widgets/custom_app_bar.dart';
 import '../widgets/bottom_nav_bar.dart';
+import '../widgets/diary_summary.dart';
 
 class DiaryScreen extends StatefulWidget {
   const DiaryScreen({super.key});
@@ -24,12 +25,28 @@ class _DiaryScreenState extends State<DiaryScreen> {
       appBar: CustomAppBar(),
       body: Center(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            Text(
-              "Page $_selectedIndex",
-              style: const TextStyle(fontSize: 24),
-            ),
+            Padding(
+              padding: const EdgeInsets.all(20),
+              child: Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(22),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.2),
+                        blurRadius: 8,
+                        spreadRadius: 1,
+                        offset: const Offset(0, 4),
+                      ),
+                    ],
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 14.0, bottom: 14, left: 24, right: 24),
+                    child: DiarySummary(),
+                  )),
+            )
           ],
         ),
       ),

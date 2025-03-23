@@ -13,6 +13,10 @@ class MyApp extends StatelessWidget {
     return MaterialApp.router(
       debugShowCheckedModeBanner: false,
       routerConfig: appRouter, // Use the defined router from router.dart
+      theme: ThemeData(
+        scaffoldBackgroundColor: Colors.white,
+        primaryColor: Color(0xff4F5C32)
+      ),
     );
   }
 }
