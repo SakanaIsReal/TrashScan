@@ -1,14 +1,18 @@
 import 'package:flutter/material.dart';
 import '../widgets/pcs_total_badge.dart';
 
-class DiarySummary extends StatefulWidget {
-  const DiarySummary({super.key});
+class DiarySummary extends StatelessWidget {
+  final double fontSize;
+  final List<SummaryItem> summaryItems;
+  final String divider;
 
-  @override
-  State<DiarySummary> createState() => _DiarySummaryState();
-}
+  const DiarySummary({
+    super.key,
+    this.fontSize = 16.0,
+    this.divider = '. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .',
+    required this.summaryItems,
+  });
 
-class _DiarySummaryState extends State<DiarySummary> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -25,59 +29,53 @@ class _DiarySummaryState extends State<DiarySummary> {
             ],
           ),
           Column(
-            children: [
-              // Generate trash
-              _buildSummaryRow('Plastic', 57, 16),
-              _buildSummaryRow('Metal', 9, 16),
-              _buildSummaryRow('Glass', 6, 16),
-              _buildSummaryRow('Paper', 13, 16),
-              _buildSummaryRow('Organic Waste', 47, 16),
-              _buildSummaryRow('Textiles', 2, 16),
-              _buildSummaryRow('E-waste', 1, 16),
-              _buildSummaryRow('Hazardous Waste', 3, 16),
-              _buildSummaryRow('Miscellaneous', 23, 16),
-            ],
+            children: summaryItems.map((item) => _buildSummaryRow(item.name, item.count)).toList(),
           )
         ],
       ),
     );
   }
 
-  /// Helper function to create a nav item
-  Widget _buildSummaryRow(String name, int count, double fontSize) {
-    String paddedNumber = count.toString();
-
+  Widget _buildSummaryRow(String name, int count) {
     return Stack(
       children: [
         Text(
-          '. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .',
+          divider,
           style: TextStyle(fontSize: fontSize),
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Container(
-                decoration: BoxDecoration(color: Colors.white),
-                child: Padding(
-                  padding: const EdgeInsets.only(right: 4.0),
-                  child: Text(
-                    name,
-                    style: TextStyle(fontSize: fontSize),
-                  ),
-                )),
+              decoration: BoxDecoration(color: Colors.white),
+              child: Padding(
+                padding: const EdgeInsets.only(right: 4.0),
+                child: Text(
+                  name,
+                  style: TextStyle(fontSize: fontSize),
+                ),
+              ),
+            ),
             Container(
-                color: Colors.white,
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 4.0),
-                  child: Text(
-                    '$paddedNumber pcs.',
-                    style: TextStyle(
-                        fontSize: fontSize, fontWeight: FontWeight.bold),
-                  ),
-                ))
+              color: Colors.white,
+              child: Padding(
+                padding: const EdgeInsets.only(left: 4.0),
+                child: Text(
+                  '$count pcs.',
+                  style: TextStyle(fontSize: fontSize, fontWeight: FontWeight.bold),
+                ),
+              ),
+            ),
           ],
         ),
       ],
     );
   }
+}
+
+class SummaryItem {
+  final String name;
+  final int count;
+
+  SummaryItem(this.name, this.count);
 }
