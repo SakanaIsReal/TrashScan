@@ -5,7 +5,7 @@
 2. Open the cloned project, then run the command in terminal `flutter pub get`
 
 ## Known Problems
-- Now the camera in the emulator is not working for some reason.
+- Now the camera in the emulator is not working for some reason. To fix the problem, **open it on your phone** via usb debugging.
 
 ## Getting Started
 
