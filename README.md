@@ -4,6 +4,11 @@
 1. Clone this project via `git clone https://github.com/SakanaIsReal/TrashScan.git`
 2. Open the cloned project, then run the command in terminal `flutter pub get`
 
+## Setup `.env`
+```env
+GOOGLE_MAPS_API_KEY = "YOUR_GOOGLE_API_KEY"
+```
+
 ## Known Problems
 - Now the camera in the emulator is not working for some reason. To fix the problem, **open it on your phone** via usb debugging.
 
