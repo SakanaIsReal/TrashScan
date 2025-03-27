@@ -1,15 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-class BottomNavBar extends StatelessWidget {
+class BottomNavBar extends StatefulWidget {
   final int selectedIndex;
-  final Function(int) onItemTapped;
 
   const BottomNavBar({
     super.key,
     required this.selectedIndex,
-    required this.onItemTapped,
   });
+
+  @override
+  State<BottomNavBar> createState() => _BottomNavBarState();
+}
+
+class _BottomNavBarState extends State<BottomNavBar> {
+  
+  static int _selectedIndex = 0;
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +51,7 @@ class BottomNavBar extends StatelessWidget {
                   _buildNavItem(context, Icons.home, 0, '/'),
                   _buildNavItem(context, Icons.calendar_today, 1, '/diary'),
                   _buildNavItem(context, Icons.bookmark, 2, '/bookmarks'),
-                  _buildNavItem(context, Icons.delete, 3, '/trash'),
+                  _buildNavItem(context, Icons.delete, 3, '/map'),
                   _buildNavItem(context, Icons.settings, 4, '/settings'),
                 ],
               ),
@@ -75,12 +87,12 @@ class BottomNavBar extends StatelessWidget {
       icon: Icon(
         icon,
         size: 30,
-        color: selectedIndex == index ? const Color(0xff4F5C32) : Colors.grey,
+        color: widget.selectedIndex == index ? const Color(0xff4F5C32) : Colors.grey,
       ),
       onPressed: () {
-        if (selectedIndex != index) {
+        if (widget.selectedIndex != index) {
           context.push(route); // Navigate only if not already selected
-          onItemTapped(index); // Update state
+          _onItemTapped(index); // Update state
         }
       },
     );
