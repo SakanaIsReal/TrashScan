@@ -1,6 +1,7 @@
 // import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:trashscan/screens/diary_screen.dart';
+import 'package:trashscan/screens/map_screen.dart';
 import 'package:trashscan/screens/scan_screen.dart';
 import '../screens/home_screen.dart';
 // import '../screens/second_screen.dart';
@@ -21,6 +22,10 @@ final GoRouter appRouter = GoRouter(
     GoRoute(
       path: '/scan',
       builder: (context, state) => ScanScreen(),
+    ),
+    GoRoute(
+      path: '/map',
+      builder: (context, state) => MapScreen(),
     ),
   ],
 );
