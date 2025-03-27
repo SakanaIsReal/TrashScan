@@ -1,5 +1,9 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
+import 'mini_calendar.dart';
+import 'diary_summary.dart';
+import 'popup_summary.dart';
 
 class TrashCalendar extends StatefulWidget {
   @override
@@ -38,6 +42,7 @@ class _TrashCalendarState extends State<TrashCalendar> {
         setState(() {
           _selectedDay = selectedDay;
           _focusedDay = focusedDay;
+          showSummaryPopup(context, MiniCalendar(), DiarySummary(divider: '. . . . . . . . . . . . . . . . . . . . . . . . . .',),);
         });
       },
       calendarStyle: CalendarStyle(

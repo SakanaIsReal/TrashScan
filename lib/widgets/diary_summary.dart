@@ -10,8 +10,18 @@ class DiarySummary extends StatelessWidget {
     super.key,
     this.fontSize = 16.0,
     this.divider = '. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .',
-    required this.summaryItems,
-  });
+    this.summaryItems = const [ // Mark the list as `const`
+    SummaryItem('Plastic', 0),
+    SummaryItem('Metal', 0),
+    SummaryItem('Glass', 0),
+    SummaryItem('Paper', 0),
+    SummaryItem('Organic Waste', 0),
+    SummaryItem('Textiles', 0),
+    SummaryItem('E-waste', 0),
+    SummaryItem('Hazardous Waste', 0),
+    SummaryItem('Miscellaneous', 0),
+  ],
+});
 
   @override
   Widget build(BuildContext context) {
@@ -77,5 +87,5 @@ class SummaryItem {
   final String name;
   final int count;
 
-  SummaryItem(this.name, this.count);
+  const SummaryItem(this.name, this.count);
 }
