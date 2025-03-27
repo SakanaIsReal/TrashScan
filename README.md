@@ -1,6 +1,11 @@
 # trashscan
 
-A new Flutter project.
+## Setup Steps
+1. Clone this project via `git clone https://github.com/SakanaIsReal/TrashScan.git`
+2. Open the cloned project, then run the command in terminal `flutter pub get`
+
+## Known Problems
+- Now the camera in the emulator is not working for some reason.
 
 ## Getting Started
 
