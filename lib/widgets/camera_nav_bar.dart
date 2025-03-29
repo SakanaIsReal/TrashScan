@@ -42,10 +42,12 @@ class _CameraNavBarState extends State<CameraNavBar> {
               onPressed: () {
                 print("Icon Button Clicked");
                 showModalBottomSheet(
+                  constraints: BoxConstraints(maxHeight: 1400),
                   showDragHandle: true,
+                  backgroundColor: Colors.white,
                   context: context,
                   builder: (BuildContext context) {
-                    return InfoSheet();
+                    return InfoSheet(type: InfoSheetType.error, message: "test");
                   },
                 );
               },
