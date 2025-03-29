@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'info_sheet.dart';
 
 class CameraNavBar extends StatefulWidget {
   const CameraNavBar({super.key});
@@ -32,20 +33,22 @@ class _CameraNavBarState extends State<CameraNavBar> {
                 ),
               ],
             ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                IconButton(
-                  icon: Icon(
-                    Icons.camera_alt,
-                    size: 36,
-                    color: Colors.black,
-                  ),
-                  onPressed: () {
-                      // context.go(route); // Navigate only if not already selected
+            child: IconButton(
+              icon: Icon(
+                Icons.camera_alt,
+                size: 36,
+                color: Colors.black,
+              ),
+              onPressed: () {
+                print("Icon Button Clicked");
+                showModalBottomSheet(
+                  showDragHandle: true,
+                  context: context,
+                  builder: (BuildContext context) {
+                    return InfoSheet();
                   },
-                )
-              ],
+                );
+              },
             ),
           ),
         ],
