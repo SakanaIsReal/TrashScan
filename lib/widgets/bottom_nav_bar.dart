@@ -50,7 +50,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
                 children: [
                   _buildNavItem(context, Icons.home, 0, '/'),
                   _buildNavItem(context, Icons.calendar_today, 1, '/diary'),
-                  _buildNavItem(context, Icons.bookmark, 2, '/bookmarks'),
+                  _buildNavItem(context, Icons.bookmark, 2, '/trashDict'),
                   _buildNavItem(context, Icons.delete, 3, '/map'),
                   _buildNavItem(context, Icons.settings, 4, '/settings'),
                 ],
