@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'bottom_nav_bar.dart';
+import '../models/trash_information_model.dart';
+import '../widgets/pcs_total_badge.dart';
 
 enum InfoSheetType { loading, information, error }
 
 class InfoSheet extends StatelessWidget {
   final InfoSheetType type;
-  final String? message;
+  final int trash_id;
 
-  const InfoSheet({super.key, required this.type, this.message});
+  const InfoSheet({super.key, required this.type, required this.trash_id});
 
   @override
   Widget build(BuildContext context) {
@@ -17,13 +19,12 @@ class InfoSheet extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Expanded( // Ensures content takes up available space, pushing BottomNavBar down
+          Expanded(
+            // Ensures content takes up available space, pushing BottomNavBar down
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 36.0),
               child: SingleChildScrollView(
-                child: 
-                  _buildContent(),
-                
+                child: Container(child: _buildContent()),
               ),
             ),
           ),
@@ -37,7 +38,8 @@ class InfoSheet extends StatelessWidget {
   Widget _buildContent() {
     switch (type) {
       case InfoSheetType.loading:
-        return Center( // Centers content in available space
+        return Center(
+          // Centers content in available space
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -48,60 +50,87 @@ class InfoSheet extends StatelessWidget {
           ),
         );
       case InfoSheetType.information:
-        return Center(
-          child: Text(
-            message ?? "Here is some information.",
-            style: const TextStyle(fontSize: 22, color: Colors.black),
-            textAlign: TextAlign.center,
-          ),
-        );
+        return _infomationDisplay(trash_id);
       case InfoSheetType.error:
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text("Sorry But...", style: TextStyle(fontSize: 22)),
-            const SizedBox(height: 4),
-            const Text(
-              "Unrecognized Item",
-              style: TextStyle(fontSize: 36, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 8),
-            Image.asset('assets/images/trash_not_found.png'),
-            const SizedBox(height: 8),
-            RichText(
-  text: TextSpan(
-    style: TextStyle(color: Colors.black, fontSize: 16),
-    children: [
-      TextSpan(
-        text: "The item you scanned could not be recognized.\n\n",
-        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-      ),
-      TextSpan(
-        text: "Try the following steps:\n\n",
-        style: TextStyle(fontWeight: FontWeight.bold),
-      ),
-      WidgetSpan(
-        child: Padding(
-          padding: const EdgeInsets.only(left: 8.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _buildBulletPoint("Check Lighting & Angle: Ensure the item is well-lit and clearly visible in the camera."),
-              _buildBulletPoint("Try Again: Adjust the position and rescan."),
-              _buildBulletPoint("Manually Select: If scanning fails, you can manually search for the item in the list."),
-              _buildBulletPoint("Report Issue: If the item is missing from our database, consider reporting it so we can improve recognition."),
-            ],
-          ),
-        ),
-      ),
-    ],
-  ),
-)
-          ],
-        );
+        return _errorDisplay();
     }
   }
+
+  Column _infomationDisplay(int id) {
+    TrashInformationModel? trashCategory = TrashInformationModel.getCategoryById(id);
+    return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text("This is", style: TextStyle(fontSize: 22)),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                trashCategory!.name,
+                style: TextStyle(fontSize: 36, fontWeight: FontWeight.w900),
+              ),
+              PcsTotalBadge(count: trashCategory.total, color: Colors.black)
+            ],
+          ),
+          const SizedBox(height: 8),
+          Image.asset(trashCategory.imagePath),
+          const SizedBox(height: 8),
+          trashCategory.description
+        ],
+      );
+  }
+
+  Column _errorDisplay() {
+    return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text("Sorry But...", style: TextStyle(fontSize: 22)),
+          const SizedBox(height: 4),
+          const Text(
+            "Unrecognized Item",
+            style: TextStyle(fontSize: 36, fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(height: 8),
+          Image.asset('assets/images/trash_not_found.png'),
+          const SizedBox(height: 8),
+          RichText(
+            text: TextSpan(
+              style: TextStyle(color: Colors.black, fontSize: 16),
+              children: [
+                TextSpan(
+                  text: "The item you scanned could not be recognized.\n\n",
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                ),
+                TextSpan(
+                  text: "Try the following steps:\n\n",
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+                WidgetSpan(
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 8.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        _buildBulletPoint(
+                            "Check Lighting & Angle: Ensure the item is well-lit and clearly visible in the camera."),
+                        _buildBulletPoint(
+                            "Try Again: Adjust the position and rescan."),
+                        _buildBulletPoint(
+                            "Manually Select: If scanning fails, you can manually search for the item in the list."),
+                        _buildBulletPoint(
+                            "Report Issue: If the item is missing from our database, consider reporting it so we can improve recognition."),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          )
+        ],
+      );
+  }
 }
+
 Widget _buildBulletPoint(String text) {
   return Padding(
     padding: const EdgeInsets.symmetric(vertical: 1.0),
