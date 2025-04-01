@@ -114,7 +114,7 @@ class SettingScreen extends StatelessWidget {
         ),
       ),
       bottomNavigationBar: BottomNavBar(
-        selectedIndex: 5,
+        selectedIndex: 4,
       ),
     );
   }
