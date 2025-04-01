@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class PcsTotalBadge extends StatefulWidget {
-  final String count;
+  final int count;
   final Color color;
 
   const PcsTotalBadge({super.key, required this.count, required this.color});
@@ -13,6 +13,7 @@ class PcsTotalBadge extends StatefulWidget {
 class _PcsTotalBadgeState extends State<PcsTotalBadge> {
   @override
   Widget build(BuildContext context) {
+    String paddedCount = widget.count.toString().padLeft(3, '0');
     return Container(
       decoration: BoxDecoration(
         color: widget.color,
@@ -24,7 +25,7 @@ class _PcsTotalBadgeState extends State<PcsTotalBadge> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
-            widget.count,
+            paddedCount,
             style: TextStyle(
                 color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
           ),

@@ -35,7 +35,7 @@ class DiarySummary extends StatelessWidget {
                 'Summary',
                 style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
               ),
-              PcsTotalBadge(count: '001', color: Theme.of(context).primaryColor)
+              PcsTotalBadge(count: 1, color: Theme.of(context).primaryColor)
             ],
           ),
           Column(
