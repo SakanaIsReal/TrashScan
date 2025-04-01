@@ -47,7 +47,7 @@ class _CameraNavBarState extends State<CameraNavBar> {
                   backgroundColor: Colors.white,
                   context: context,
                   builder: (BuildContext context) {
-                    return InfoSheet(type: InfoSheetType.error, message: "test");
+                    return InfoSheet(type: InfoSheetType.information, trash_id: 1);
                   },
                 );
               },
