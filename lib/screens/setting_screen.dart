@@ -80,7 +80,7 @@ class SettingScreen extends StatelessWidget {
                   height: 30,
                 ),
                 onTap: () {
-                  context.go("/NotificationSetting");
+                  context.push("/NotificationSetting");
                 },
               ),
             ),
@@ -106,7 +106,7 @@ class SettingScreen extends StatelessWidget {
                   height: 30,
                 ),
                 onTap: () {
-                  context.go('/about');
+                  context.push('/about');
                 },
               ),
             ),
