@@ -7,6 +7,7 @@ class TrashInformationModel {
   RichText description;
   String imagePath;
   int total;
+  Color color;
 
   TrashInformationModel({
     required this.id,
@@ -15,6 +16,7 @@ class TrashInformationModel {
     required this.description,
     required this.imagePath,
     required this.total,
+    required this.color
   });
 
   static List<TrashInformationModel> getCategories() {
@@ -38,50 +40,11 @@ class TrashInformationModel {
       ),
       imagePath: 'assets/images/plastics.jpg',
       total: 120,
+      color: Color(0xff76CAFF)
     ));
 
     categories.add(TrashInformationModel(
       id: 2,
-      name: 'Metals',
-      tags: ['Recyclable', 'Aluminum', 'Steel'],
-      description: RichText(
-        text: TextSpan(
-          text: 'Metals are highly recyclable. ',
-          style: TextStyle(color: Colors.black),
-          children: [
-            TextSpan(
-              text: 'Learn more',
-              style: TextStyle(color: Colors.blue),
-            ),
-          ],
-        ),
-      ),
-      imagePath: 'assets/images/metals.png',
-      total: 85,
-    ));
-
-    categories.add(TrashInformationModel(
-      id: 3,
-      name: 'Glass',
-      tags: ['Recyclable', 'Bottles', 'Jars'],
-      description: RichText(
-        text: TextSpan(
-          text: 'Glass can be recycled endlessly. ',
-          style: TextStyle(color: Colors.black),
-          children: [
-            TextSpan(
-              text: 'Learn more',
-              style: TextStyle(color: Colors.blue),
-            ),
-          ],
-        ),
-      ),
-      imagePath: 'assets/images/glass.png',
-      total: 65,
-    ));
-
-    categories.add(TrashInformationModel(
-      id: 4,
       name: 'Paper',
       tags: ['Recyclable', 'Cardboard', 'Newspaper'],
       description: RichText(
@@ -98,6 +61,49 @@ class TrashInformationModel {
       ),
       imagePath: 'assets/images/paper.png',
       total: 200,
+      color: Color(0xff3CB75D)
+    ));
+
+    categories.add(TrashInformationModel(
+      id: 3,
+      name: 'E-waste',
+      tags: ['Hazardous', 'Electronics', 'Recyclable'],
+      description: RichText(
+        text: TextSpan(
+          text: 'E-waste requires special recycling. ',
+          style: TextStyle(color: Colors.black),
+          children: [
+            TextSpan(
+              text: 'Learn more',
+              style: TextStyle(color: Colors.blue),
+            ),
+          ],
+        ),
+      ),
+      imagePath: 'assets/images/ewaste.png',
+      total: 25,
+      color: Color(0xffFFC65C)
+    ));
+
+    categories.add(TrashInformationModel(
+      id: 4,
+      name: 'Glass',
+      tags: ['Recyclable', 'Bottles', 'Jars'],
+      description: RichText(
+        text: TextSpan(
+          text: 'Glass can be recycled endlessly. ',
+          style: TextStyle(color: Colors.black),
+          children: [
+            TextSpan(
+              text: 'Learn more',
+              style: TextStyle(color: Colors.blue),
+            ),
+          ],
+        ),
+      ),
+      imagePath: 'assets/images/glass.png',
+      total: 65,
+      color: Color(0xff949494)
     ));
 
     categories.add(TrashInformationModel(
@@ -118,50 +124,11 @@ class TrashInformationModel {
       ),
       imagePath: 'assets/images/organic.png',
       total: 150,
+      color: Color(0xffF3833D)
     ));
 
     categories.add(TrashInformationModel(
       id: 6,
-      name: 'Textiles',
-      tags: ['Donatable', 'Reusable', 'Clothing'],
-      description: RichText(
-        text: TextSpan(
-          text: 'Textiles can be donated or recycled. ',
-          style: TextStyle(color: Colors.black),
-          children: [
-            TextSpan(
-              text: 'Learn more',
-              style: TextStyle(color: Colors.blue),
-            ),
-          ],
-        ),
-      ),
-      imagePath: 'assets/images/textiles.png',
-      total: 40,
-    ));
-
-    categories.add(TrashInformationModel(
-      id: 7,
-      name: 'E-waste',
-      tags: ['Hazardous', 'Electronics', 'Recyclable'],
-      description: RichText(
-        text: TextSpan(
-          text: 'E-waste requires special recycling. ',
-          style: TextStyle(color: Colors.black),
-          children: [
-            TextSpan(
-              text: 'Learn more',
-              style: TextStyle(color: Colors.blue),
-            ),
-          ],
-        ),
-      ),
-      imagePath: 'assets/images/ewaste.png',
-      total: 25,
-    ));
-
-    categories.add(TrashInformationModel(
-      id: 8,
       name: 'Hazardous Waste',
       tags: ['Dangerous', 'Chemicals', 'Batteries'],
       description: RichText(
@@ -178,26 +145,7 @@ class TrashInformationModel {
       ),
       imagePath: 'assets/images/hazardous.png',
       total: 15,
-    ));
-
-    categories.add(TrashInformationModel(
-      id: 9,
-      name: 'Miscellaneous',
-      tags: ['Other', 'Non-recyclable', 'Landfill'],
-      description: RichText(
-        text: TextSpan(
-          text: 'Items that don\'t fit other categories. ',
-          style: TextStyle(color: Colors.black),
-          children: [
-            TextSpan(
-              text: 'Learn more',
-              style: TextStyle(color: Colors.blue),
-            ),
-          ],
-        ),
-      ),
-      imagePath: 'assets/images/miscellaneous.png',
-      total: 75,
+      color: Color(0xffFF4F4F)
     ));
 
     return categories;
