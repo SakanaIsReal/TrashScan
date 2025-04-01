@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'bottom_nav_bar.dart';
 import '../models/trash_information_model.dart';
 import '../widgets/pcs_total_badge.dart';
@@ -24,7 +25,7 @@ class InfoSheet extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 36.0),
               child: SingleChildScrollView(
-                child: Container(child: _buildContent()),
+                child: Container(child: _buildContent(context)),
               ),
             ),
           ),
@@ -35,7 +36,7 @@ class InfoSheet extends StatelessWidget {
     );
   }
 
-  Widget _buildContent() {
+  Widget _buildContent(BuildContext context) {
     switch (type) {
       case InfoSheetType.loading:
         return Center(
@@ -50,13 +51,13 @@ class InfoSheet extends StatelessWidget {
           ),
         );
       case InfoSheetType.information:
-        return _infomationDisplay(trash_id);
+        return _infomationDisplay(context, trash_id);
       case InfoSheetType.error:
         return _errorDisplay();
     }
   }
 
-  Column _infomationDisplay(int id) {
+  Column _infomationDisplay(BuildContext context, int id) {
     TrashInformationModel? trashCategory =
         TrashInformationModel.getCategoryById(id);
     return Column(
@@ -79,8 +80,51 @@ class InfoSheet extends StatelessWidget {
           borderRadius: BorderRadius.circular(24.0),
           child: Image.asset(trashCategory.imagePath),
         ),
-        const SizedBox(height: 8),
-        trashCategory.description
+        const SizedBox(height: 16),
+        trashCategory.description,
+        const SizedBox(height: 24),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            SvgPicture.asset('assets/icons/trash_diary.svg'),
+            SvgPicture.asset('assets/icons/arrow_right.svg'),
+            GestureDetector(
+                onTap: () {print('Button pressed!');}, // add diary here
+                child: SvgPicture.asset('assets/icons/click_here_button.svg')),
+          ],
+        ),
+        const SizedBox(height: 24),
+        GestureDetector(
+          onTap: () {
+            // Handle button press
+            print('Button pressed!');
+          },
+          child: Container(
+            padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+            decoration: BoxDecoration(
+              color: Theme.of(context).primaryColor, // Background color
+              borderRadius: BorderRadius.circular(20), // Rounded corners
+              boxShadow: [
+                // Optional shadow
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.1),
+                  blurRadius: 6,
+                  offset: Offset(0, 3),
+                ),
+              ],
+            ),
+            child: Center(
+              child: Text(
+                'Find nearby bin',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ),
+        )
       ],
     );
   }
@@ -160,8 +204,10 @@ SizedBox _buildTags(List<String> tags, Color color) {
           ),
         ),
         backgroundColor: color,
-        padding: const EdgeInsets.symmetric(horizontal: 10), // Inner chip padding
-        materialTapTargetSize: MaterialTapTargetSize.shrinkWrap, // Compact touch target
+        padding:
+            const EdgeInsets.symmetric(horizontal: 10), // Inner chip padding
+        materialTapTargetSize:
+            MaterialTapTargetSize.shrinkWrap, // Compact touch target
       ),
     ),
   );
