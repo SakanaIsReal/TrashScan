@@ -5,6 +5,7 @@ import 'package:permission_handler/permission_handler.dart';
 import '../widgets/custom_app_bar.dart';
 import '../widgets/bottom_nav_bar.dart';
 import '../models/trash_information_model.dart';
+import '../widgets/info_sheet.dart';
 
 class MapScreen extends StatefulWidget {
   @override
@@ -116,28 +117,42 @@ class _MapScreenState extends State<MapScreen> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
+        backgroundColor: Colors.white,
         title: Text(category.name),
         content: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
             children: [
+              Container(width: 300,child: buildTags(category.tags, category.color)),
+              SizedBox(height: 10),
+
               if (category.imagePath.isNotEmpty)
-                Image.asset(category.imagePath, height: 100),
+                Center(
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(30.0),
+                    child: Image.asset(
+                      category.imagePath,
+                      height: 100,
+                      width: 300,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ),
               SizedBox(height: 10),
               Text("Total: ${category.total}"),
               SizedBox(height: 10),
               category.description,
               SizedBox(height: 10),
-              Wrap(
-                spacing: 8,
-                children: category.tags
-                    .map((tag) => Chip(
-                          label: Text(tag),
-                          backgroundColor: category.color.withOpacity(0.2),
-                        ))
-                    .toList(),
-              ),
+              // Wrap(
+              //   spacing: 8,
+              //   children: category.tags
+              //       .map((tag) => Chip(
+              //             label: Text(tag),
+              //             backgroundColor: category.color.withOpacity(0.2),
+              //           ))
+              //       .toList(),
+              // ),
             ],
           ),
         ),
