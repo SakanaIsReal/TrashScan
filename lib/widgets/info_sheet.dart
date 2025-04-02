@@ -74,7 +74,7 @@ class InfoSheet extends StatelessWidget {
             PcsTotalBadge(count: trashCategory.total, color: Colors.black)
           ],
         ),
-        _buildTags(trashCategory.tags, trashCategory.color),
+        buildTags(trashCategory.tags, trashCategory.color),
         const SizedBox(height: 8),
         ClipRRect(
           borderRadius: BorderRadius.circular(24.0),
@@ -160,13 +160,13 @@ class InfoSheet extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      _buildBulletPoint(
+                      buildBulletPoint(
                           "Check Lighting & Angle: Ensure the item is well-lit and clearly visible in the camera."),
-                      _buildBulletPoint(
+                      buildBulletPoint(
                           "Try Again: Adjust the position and rescan."),
-                      _buildBulletPoint(
+                      buildBulletPoint(
                           "Manually Select: If scanning fails, you can manually search for the item in the list."),
-                      _buildBulletPoint(
+                      buildBulletPoint(
                           "Report Issue: If the item is missing from our database, consider reporting it so we can improve recognition."),
                     ],
                   ),
@@ -180,7 +180,7 @@ class InfoSheet extends StatelessWidget {
   }
 }
 
-SizedBox _buildTags(List<String> tags, Color color) {
+SizedBox buildTags(List<String> tags, Color color) {
   return SizedBox(
     height: 40, // Fixed height to prevent overflow
     child: ListView.separated(
@@ -213,7 +213,7 @@ SizedBox _buildTags(List<String> tags, Color color) {
   );
 }
 
-Widget _buildBulletPoint(String text) {
+Widget buildBulletPoint(String text) {
   return Padding(
     padding: const EdgeInsets.symmetric(vertical: 1.0),
     child: Row(
