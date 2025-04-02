@@ -5,18 +5,22 @@ class TrashInformationModel {
   String name;
   List<String> tags;
   RichText description;
+  RichText longDescription; // New property for detailed content
   String imagePath;
   int total;
   Color color;
+  IconData icon;
 
   TrashInformationModel({
     required this.id,
     required this.name,
     required this.tags,
     required this.description,
+    required this.longDescription, // Added to constructor
     required this.imagePath,
     required this.total,
-    required this.color
+    required this.color,
+    required this.icon
   });
 
   static List<TrashInformationModel> getCategories() {
@@ -38,9 +42,39 @@ class TrashInformationModel {
           ],
         ),
       ),
+      longDescription: RichText(
+        text: TextSpan(
+          style: TextStyle(color: Colors.black, fontSize: 16),
+          children: [
+            TextSpan(
+              text: 'How to Sort Plastic Waste\n\n',
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+            ),
+            TextSpan(text: '1. Check the Resin Identification Code (usually found at the bottom of containers):\n'),
+            TextSpan(text: '   - ♳ PET (1): Water bottles, food containers\n'),
+            TextSpan(text: '   - ♴ HDPE (2): Milk jugs, shampoo bottles\n'),
+            TextSpan(text: '   - ♵ PVC (3): Pipes, credit cards\n'),
+            TextSpan(text: '   - ♶ LDPE (4): Plastic bags, squeeze bottles\n\n'),
+            TextSpan(text: '2. Clean containers: Rinse out food residue\n'),
+            TextSpan(text: '3. Remove non-plastic parts: Caps, labels (unless same material)\n'),
+            TextSpan(text: '4. Flatten containers to save space\n\n'),
+            TextSpan(text: 'What NOT to recycle:\n'),
+            TextSpan(text: '• Plastic bags (return to grocery stores)\n'),
+            TextSpan(text: '• Styrofoam\n'),
+            TextSpan(text: '• Plastic utensils\n'),
+            TextSpan(text: '• Biodegradable plastics\n\n'),
+            TextSpan(
+              text: 'Recycling Process:',
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+            TextSpan(text: ' Collected → Sorted → Shredded → Washed → Melted → Pelletized → Made into new products'),
+          ],
+        ),
+      ),
       imagePath: 'assets/images/plastics.jpg',
       total: 120,
-      color: Color(0xff76CAFF)
+      color: Color(0xff76CAFF),
+      icon: Icons.local_drink
     ));
 
     categories.add(TrashInformationModel(
@@ -59,9 +93,35 @@ class TrashInformationModel {
           ],
         ),
       ),
-      imagePath: 'assets/images/paper.png',
+      longDescription: RichText(
+        text: TextSpan(
+          style: TextStyle(color: Colors.black, fontSize: 16),
+          children: [
+            TextSpan(
+              text: 'Proper Paper Recycling Guide\n\n',
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+            ),
+            TextSpan(text: 'Accepted Materials:\n'),
+            TextSpan(text: '• Office paper\n• Newspapers\n• Magazines\n• Cardboard (flattened)\n• Paper bags\n• Paperboard (cereal boxes)\n\n'),
+            TextSpan(text: 'Preparation Steps:\n'),
+            TextSpan(text: '1. Remove any plastic windows from envelopes\n'),
+            TextSpan(text: '2. Take out staples and paper clips\n'),
+            TextSpan(text: '3. Flatten cardboard boxes\n'),
+            TextSpan(text: '4. Keep paper dry and clean\n\n'),
+            TextSpan(text: 'What NOT to include:\n'),
+            TextSpan(text: '• Waxed paper\n• Thermal receipts\n• Used paper towels\n• Pizza boxes with grease stains\n• Laminated paper\n\n'),
+            TextSpan(
+              text: 'Recycling Benefits:',
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+            TextSpan(text: ' Saves trees (1 ton = 17 trees), uses 40% less energy than making new paper, reduces water pollution by 35%'),
+          ],
+        ),
+      ),
+      imagePath: 'assets/images/papers.jpg',
       total: 200,
-      color: Color(0xff3CB75D)
+      color: Color(0xff3CB75D),
+      icon: Icons.receipt_long
     ));
 
     categories.add(TrashInformationModel(
@@ -80,9 +140,32 @@ class TrashInformationModel {
           ],
         ),
       ),
+      longDescription: RichText(
+        text: TextSpan(
+          style: TextStyle(color: Colors.black, fontSize: 16),
+          children: [
+            TextSpan(
+              text: 'Electronic Waste Recycling\n\n',
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+            ),
+            TextSpan(text: 'Common E-waste Items:\n'),
+            TextSpan(text: '• Computers and laptops\n• TVs and monitors\n• Cell phones\n• Printers\n• Batteries\n• Small appliances\n\n'),
+            TextSpan(text: 'Why Recycle E-waste?\n'),
+            TextSpan(text: 'Electronics contain valuable metals (gold, silver, copper) and hazardous materials (lead, mercury) that should be properly handled.\n\n'),
+            TextSpan(text: 'Recycling Steps:\n'),
+            TextSpan(text: '1. Delete all personal data from devices\n'),
+            TextSpan(text: '2. Remove batteries if possible (recycle separately)\n'),
+            TextSpan(text: '3. Find certified e-waste recycler\n'),
+            TextSpan(text: '4. Check for manufacturer take-back programs\n\n'),
+            TextSpan(text: 'What NOT to do:\n'),
+            TextSpan(text: '• Throw in regular trash\n• Burn electronics\n• Dismantle at home (risk of exposure to toxins)'),
+          ],
+        ),
+      ),
       imagePath: 'assets/images/ewaste.png',
       total: 25,
-      color: Color(0xffFFC65C)
+      color: Color(0xffFFC65C),
+      icon: Icons.computer
     ));
 
     categories.add(TrashInformationModel(
@@ -101,9 +184,34 @@ class TrashInformationModel {
           ],
         ),
       ),
+      longDescription: RichText(
+        text: TextSpan(
+          style: TextStyle(color: Colors.black, fontSize: 16),
+          children: [
+            TextSpan(
+              text: 'Glass Recycling Guide\n\n',
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+            ),
+            TextSpan(text: 'Accepted Glass Items:\n'),
+            TextSpan(text: '• Clear, green, and brown glass bottles\n• Glass jars (food, cosmetics)\n• Beer and wine bottles\n\n'),
+            TextSpan(text: 'Preparation:\n'),
+            TextSpan(text: '1. Rinse containers (no need to remove labels)\n'),
+            TextSpan(text: '2. Remove metal lids (recycle separately)\n'),
+            TextSpan(text: '3. Sort by color if required in your area\n\n'),
+            TextSpan(text: 'What NOT to recycle:\n'),
+            TextSpan(text: '• Window glass\n• Mirrors\n• Light bulbs\n• Ceramics\n• Pyrex\n• Drinking glasses\n\n'),
+            TextSpan(
+              text: 'Recycling Process:',
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+            TextSpan(text: ' Glass is crushed into cullet → Mixed with raw materials → Melted → Molded into new containers. Recycled glass melts at lower temperature, saving energy.'),
+          ],
+        ),
+      ),
       imagePath: 'assets/images/glass.png',
       total: 65,
-      color: Color(0xff949494)
+      color: Color(0xff949494),
+      icon: Icons.liquor
     ));
 
     categories.add(TrashInformationModel(
@@ -122,9 +230,34 @@ class TrashInformationModel {
           ],
         ),
       ),
+      longDescription: RichText(
+        text: TextSpan(
+          style: TextStyle(color: Colors.black, fontSize: 16),
+          children: [
+            TextSpan(
+              text: 'Composting Organic Waste\n\n',
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+            ),
+            TextSpan(text: 'What to Compost:\n'),
+            TextSpan(text: '• Fruit and vegetable scraps\n• Eggshells\n• Coffee grounds and filters\n• Tea bags\n• Yard trimmings\n• Leaves\n• Small amounts of paper\n\n'),
+            TextSpan(text: 'What NOT to Compost:\n'),
+            TextSpan(text: '• Meat and dairy products\n• Fats and oils\n• Diseased plants\n• Pet wastes\n• Coal or charcoal ash\n\n'),
+            TextSpan(text: 'Composting Methods:\n'),
+            TextSpan(text: '1. Backyard composting: Layer greens (nitrogen) and browns (carbon)\n'),
+            TextSpan(text: '2. Vermicomposting: Using worms to break down food waste\n'),
+            TextSpan(text: '3. Municipal composting: Check local collection programs\n\n'),
+            TextSpan(
+              text: 'Benefits:',
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+            TextSpan(text: ' Reduces landfill methane, creates nutrient-rich soil amendment, reduces need for chemical fertilizers'),
+          ],
+        ),
+      ),
       imagePath: 'assets/images/organic.png',
       total: 150,
-      color: Color(0xffF3833D)
+      color: Color(0xffF3833D),
+      icon: Icons.compost
     ));
 
     categories.add(TrashInformationModel(
@@ -143,9 +276,38 @@ class TrashInformationModel {
           ],
         ),
       ),
+      longDescription: RichText(
+        text: TextSpan(
+          style: TextStyle(color: Colors.black, fontSize: 16),
+          children: [
+            TextSpan(
+              text: 'Hazardous Waste Disposal Guide\n\n',
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+            ),
+            TextSpan(text: 'Common Hazardous Waste:\n'),
+            TextSpan(text: '• Batteries (all types)\n• Paint and solvents\n• Pesticides\n• Cleaning chemicals\n• Fluorescent bulbs\n• Motor oil\n• Medications\n\n'),
+            TextSpan(text: 'Safe Disposal Methods:\n'),
+            TextSpan(text: '1. Never pour down drain or throw in trash\n'),
+            TextSpan(text: '2. Check for local collection events\n'),
+            TextSpan(text: '3. Use designated drop-off facilities\n'),
+            TextSpan(text: '4. Keep in original containers when possible\n'),
+            TextSpan(text: '5. Never mix different chemicals\n\n'),
+            TextSpan(text: 'Special Handling:\n'),
+            TextSpan(text: '• Batteries: Tape terminals before disposal\n'),
+            TextSpan(text: '• Paint: Dry out latex paint before disposal\n'),
+            TextSpan(text: '• Needles: Use sharps containers\n\n'),
+            TextSpan(
+              text: 'Why Proper Disposal Matters:',
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+            TextSpan(text: ' Prevents contamination of water supplies, reduces fire risk, protects sanitation workers'),
+          ],
+        ),
+      ),
       imagePath: 'assets/images/hazardous.png',
       total: 15,
-      color: Color(0xffFF4F4F)
+      color: Color(0xffFF4F4F),
+      icon: Icons.dangerous
     ));
 
     return categories;
