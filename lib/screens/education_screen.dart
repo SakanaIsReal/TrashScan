@@ -46,20 +46,36 @@ class _EducationScreenState extends State<EducationScreen> {
                   children: [
                     Row(
                       mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Icon(
                           trashCategory.icon,
                           color: Colors.black,
-                          size: 30,
+                          size: 54,
                         ),
                         const SizedBox(width: 10),
-                        Text(
-                          trashCategory.name,
-                          style: TextStyle(
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black,
-                          ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "Introducing...",
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w400,
+                                color: Colors.black,
+                                height: 0,
+                              ),
+                            ),
+                            Text(
+                              trashCategory.name,
+                              style: TextStyle(
+                                fontSize: 32,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black,
+                                height: 0,
+                              ),
+                            ),
+                          ],
                         ),
                       ],
                     ),
@@ -79,6 +95,39 @@ class _EducationScreenState extends State<EducationScreen> {
                 ),
                 const SizedBox(height: 20),
                 trashCategory.longDescription,
+                const SizedBox(height: 36),
+                GestureDetector(
+                  onTap: () {
+                    // Handle button press
+                    print('Button pressed!');
+                  },
+                  child: Container(
+                    padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).primaryColor, // Background color
+                      borderRadius:
+                          BorderRadius.circular(20), // Rounded corners
+                      boxShadow: [
+                        // Optional shadow
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.1),
+                          blurRadius: 6,
+                          offset: Offset(0, 3),
+                        ),
+                      ],
+                    ),
+                    child: Center(
+                      child: Text(
+                        'Find nearby bin',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ),
+                )
               ],
             ),
           ),
