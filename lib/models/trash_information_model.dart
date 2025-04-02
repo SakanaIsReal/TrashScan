@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class TrashInformationModel {
   int id;
@@ -10,6 +11,8 @@ class TrashInformationModel {
   int total;
   Color color;
   IconData icon;
+  String markerPath;
+  List<LatLng>? trashLoc;
 
   TrashInformationModel({
     required this.id,
@@ -20,7 +23,9 @@ class TrashInformationModel {
     required this.imagePath,
     required this.total,
     required this.color,
-    required this.icon
+    required this.icon,
+    required this.markerPath,
+    this.trashLoc = const [LatLng(13.792049, 100.320260), LatLng(13.792027, 100.320150)],
   });
 
   static List<TrashInformationModel> getCategories() {
@@ -74,7 +79,9 @@ class TrashInformationModel {
       imagePath: 'assets/images/plastics.jpg',
       total: 120,
       color: Color(0xff76CAFF),
-      icon: Icons.local_drink
+      icon: Icons.local_drink,
+      markerPath: 'assets/images/marker_plastic.png',
+      trashLoc: [],
     ));
 
     categories.add(TrashInformationModel(
@@ -121,7 +128,9 @@ class TrashInformationModel {
       imagePath: 'assets/images/papers.jpg',
       total: 200,
       color: Color(0xff3CB75D),
-      icon: Icons.receipt_long
+      icon: Icons.receipt_long,
+      markerPath: 'assets/images/marker_paper.png',
+      trashLoc: [LatLng(13.792056, 100.319036), LatLng(13.792981, 100.318814)],
     ));
 
     categories.add(TrashInformationModel(
@@ -165,7 +174,9 @@ class TrashInformationModel {
       imagePath: 'assets/images/ewaste.png',
       total: 25,
       color: Color(0xffFFC65C),
-      icon: Icons.computer
+      icon: Icons.computer,
+      markerPath: 'assets/images/marker_ewaste.png',
+      trashLoc: [LatLng(13.792910, 100.319621), LatLng(13.793183, 100.320301)],
     ));
 
     categories.add(TrashInformationModel(
@@ -211,7 +222,9 @@ class TrashInformationModel {
       imagePath: 'assets/images/glass.png',
       total: 65,
       color: Color(0xff949494),
-      icon: Icons.liquor
+      icon: Icons.liquor,
+      markerPath: 'assets/images/marker_glass.png',
+      trashLoc: [LatLng(13.793404, 100.320103), LatLng(13.793558, 100.319809)],
     ));
 
     categories.add(TrashInformationModel(
@@ -257,7 +270,9 @@ class TrashInformationModel {
       imagePath: 'assets/images/organic.png',
       total: 150,
       color: Color(0xffF3833D),
-      icon: Icons.compost
+      icon: Icons.compost,
+      markerPath: 'assets/images/marker_organic.png',
+      trashLoc: [LatLng(13.793521, 100.319318), LatLng(13.793644, 100.318778)],
     ));
 
     categories.add(TrashInformationModel(
@@ -307,7 +322,9 @@ class TrashInformationModel {
       imagePath: 'assets/images/hazardous.png',
       total: 15,
       color: Color(0xffFF4F4F),
-      icon: Icons.dangerous
+      icon: Icons.dangerous,
+      markerPath: 'assets/images/marker_hazadous.png',
+      trashLoc: [LatLng(13.793449, 100.320687), LatLng(13.792875, 100.320679)],
     ));
 
     return categories;
