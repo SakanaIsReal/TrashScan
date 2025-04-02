@@ -39,7 +39,10 @@ class _ScanScreenState extends State<ScanScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    CustomBackButton(),
+                    Padding(
+                      padding: const EdgeInsets.all(20.0),
+                      child: CustomBackButton(),
+                    ),
                   ],
                 ),
                 Expanded(
