@@ -55,7 +55,7 @@ class SettingScreen extends StatelessWidget {
                   width: 30,
                   height: 30,
                 ),
-                onTap: () {},
+                onTap: () => context.push('/account_edit'),
               ),
             ),
             Card(
