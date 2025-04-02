@@ -1,5 +1,9 @@
 import 'package:go_router/go_router.dart';
 import 'package:trashscan/screens/about_team_screen.dart';
+import 'package:trashscan/screens/account_edit_screen.dart';
+import 'package:trashscan/screens/account_registration_screen.dart';
+import 'package:trashscan/screens/account_screen.dart';
+import 'package:trashscan/screens/advancement_screen.dart';
 import 'package:trashscan/screens/diary_screen.dart';
 import 'package:trashscan/screens/education_screen.dart';
 import 'package:trashscan/screens/map_screen.dart';
@@ -55,6 +59,22 @@ final GoRouter appRouter = GoRouter(
         final id = int.parse(state.pathParameters['id']!);
         return EducationScreen(id: id);
       },
+    ),
+    GoRoute(
+      path: "/account",
+      builder: (context, state) => AccountScreen(),
+    ),
+    GoRoute(
+      path: "/advancement",
+      builder: (context, state) => AdvancementScreen(),
+    ),
+    GoRoute(
+      path: "/account_edit",
+      builder: (context, state) => AccountEditScreen(),
+    ),
+    GoRoute(
+      path: "/account_registration",
+      builder: (context, state) => AccountRegistrationScreen(),
     ),
   ],
 );
