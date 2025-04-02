@@ -81,7 +81,7 @@ class TrashInformationModel {
       color: Color(0xff76CAFF),
       icon: Icons.local_drink,
       markerPath: 'assets/images/marker_plastic.png',
-      trashLoc: [],
+      trashLoc: [LatLng(13.792141, 100.319698), LatLng(13.792003, 100.319754)],
     ));
 
     categories.add(TrashInformationModel(
@@ -323,7 +323,7 @@ class TrashInformationModel {
       total: 15,
       color: Color(0xffFF4F4F),
       icon: Icons.dangerous,
-      markerPath: 'assets/images/marker_hazadous.png',
+      markerPath: 'assets/images/marker_hazardous.png',
       trashLoc: [LatLng(13.793449, 100.320687), LatLng(13.792875, 100.320679)],
     ));
 
