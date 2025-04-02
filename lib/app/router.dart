@@ -1,9 +1,7 @@
-// import 'package:flutter/material.dart';
-import 'dart:ui';
-
 import 'package:go_router/go_router.dart';
 import 'package:trashscan/screens/about_team_screen.dart';
 import 'package:trashscan/screens/diary_screen.dart';
+import 'package:trashscan/screens/education_screen.dart';
 import 'package:trashscan/screens/map_screen.dart';
 import 'package:trashscan/screens/scan_screen.dart';
 import 'package:trashscan/screens/setting_screen.dart';
@@ -49,6 +47,14 @@ final GoRouter appRouter = GoRouter(
     GoRoute(
       path: "/trashDict",
       builder: (context, state) => TrashdictScreen(),
-    )
+    ),
+    GoRoute(
+      path: '/education/:id',
+      name: 'education',
+      builder: (context, state) {
+        final id = int.parse(state.pathParameters['id']!);
+        return EducationScreen(id: id);
+      },
+    ),
   ],
 );
