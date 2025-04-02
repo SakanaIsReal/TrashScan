@@ -7,35 +7,32 @@ class CustomBackButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      child: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(40),
-            color: Colors.white,
-            boxShadow: const [
-              BoxShadow(
-                color: Colors.black26,
-                blurRadius: 10,
-                spreadRadius: 1,
-                offset: Offset(0, 4),
-              ),
-            ],
-          ),
-          child: IconButton(
-            icon: const Icon(
-              Icons.arrow_back,
-              size: 26,
-              color: Colors.black,
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(40),
+          color: Colors.white,
+          boxShadow: const [
+            BoxShadow(
+              color: Colors.black26,
+              blurRadius: 10,
+              spreadRadius: 1,
+              offset: Offset(0, 4),
             ),
-            onPressed: () {
-              if (GoRouter.of(context).canPop()) {
-                context.pop(); // Use go_router's pop method
-              } else {
-                debugPrint("No route to pop");
-              }
-            },
+          ],
+        ),
+        child: IconButton(
+          icon: const Icon(
+            Icons.arrow_back,
+            size: 26,
+            color: Colors.black,
           ),
+          onPressed: () {
+            if (GoRouter.of(context).canPop()) {
+              context.pop(); // Use go_router's pop method
+            } else {
+              debugPrint("No route to pop");
+            }
+          },
         ),
       ),
     );
