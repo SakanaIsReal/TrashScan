@@ -171,7 +171,7 @@ class TrashInformationModel {
           ],
         ),
       ),
-      imagePath: 'assets/images/ewaste.png',
+      imagePath: 'assets/images/ewaste.jpg',
       total: 25,
       color: Color(0xffFFC65C),
       icon: Icons.computer,
@@ -267,7 +267,7 @@ class TrashInformationModel {
           ],
         ),
       ),
-      imagePath: 'assets/images/organic.png',
+      imagePath: 'assets/images/organic.jpg',
       total: 150,
       color: Color(0xffF3833D),
       icon: Icons.compost,
@@ -277,7 +277,7 @@ class TrashInformationModel {
 
     categories.add(TrashInformationModel(
       id: 6,
-      name: 'Hazardous Waste',
+      name: 'Hazardous',
       tags: ['Dangerous', 'Chemicals', 'Batteries'],
       description: RichText(
         text: TextSpan(
@@ -319,7 +319,7 @@ class TrashInformationModel {
           ],
         ),
       ),
-      imagePath: 'assets/images/hazardous.png',
+      imagePath: 'assets/images/hazardous.jpg',
       total: 15,
       color: Color(0xffFF4F4F),
       icon: Icons.dangerous,
