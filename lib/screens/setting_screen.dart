@@ -17,12 +17,20 @@ class SettingScreen extends StatelessWidget {
           children: [
             Row(
               children: [
-                Image.asset(
-                  'assets/icons/gear_setting.png',
+                Container(
                   width: 35,
                   height: 35,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+
+                  ),
+                  child: const Icon(
+                    Icons.settings,
+                    size: 36,
+                    color: Colors.black,
+                  ),
                 ),
-                SizedBox(width: 10),
+                const SizedBox(width: 10),
                 Text(
                   "Setting",
                   style: TextStyle(
@@ -33,81 +41,150 @@ class SettingScreen extends StatelessWidget {
                 ),
               ],
             ),
-            SizedBox(height: 30),
+            const SizedBox(height: 30),
             Card(
+              elevation: 0,
               color: Colors.white,
-              margin: EdgeInsets.only(bottom: 16),
-              elevation: 4,
+              margin: const EdgeInsets.only(bottom: 18),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(50),
+                side: const BorderSide(
+                  color: Color.fromARGB(255, 204, 204, 204),
+                  width: 1,
+                ),
               ),
-              child: ListTile(
-                leading: Image.asset(
-                  'assets/icons/account_circle.png',
-                  width: 30,
-                  height: 30,
+              child: Padding(
+                padding: const EdgeInsets.all(4.0),
+                child: ListTile(
+                  leading: Container(
+                    width: 30,
+                    height: 30,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                
+                    ),
+                    child: const Icon(
+                      Icons.person,
+                      size: 26,
+                      color: Colors.black,
+                    ),
+                  ),
+                  title: Text('Account',
+                      style:
+                          TextStyle(fontSize: 25, fontWeight: FontWeight.w500)),
+                  trailing: Container(
+                    width: 30,
+                    height: 30,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                
+                    ),
+                    child: const Icon(
+                      Icons.arrow_forward_ios,
+                      size: 16,
+                      color: Colors.black,
+                    ),
+                  ),
+                  onTap: () => context.push('/account_edit'),
                 ),
-                title: Text('Account',
-                    style:
-                        TextStyle(fontSize: 25, fontWeight: FontWeight.w500)),
-                trailing: Image.asset(
-                  'assets/icons/arrow_right.png',
-                  width: 30,
-                  height: 30,
-                ),
-                onTap: () => context.push('/account_edit'),
               ),
             ),
             Card(
+              elevation: 0,
               color: Colors.white,
-              margin: EdgeInsets.only(bottom: 16),
-              elevation: 4,
+              margin: const EdgeInsets.only(bottom: 18),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(50),
+                side: const BorderSide(
+                  color: Color.fromARGB(255, 204, 204, 204),
+                  width: 1,
+                ),
               ),
-              child: ListTile(
-                leading: Image.asset(
-                  'assets/icons/Notification_icon.png',
-                  width: 30,
-                  height: 30,
+              child: Padding(
+                padding: const EdgeInsets.all(4.0),
+                child: ListTile(
+                  leading: Container(
+                    width: 30,
+                    height: 30,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                
+                    ),
+                    child: const Icon(
+                      Icons.notifications,
+                      size: 26,
+                      color: Colors.black,
+                    ),
+                  ),
+                  title: Text('Notification',
+                      style:
+                          TextStyle(fontSize: 25, fontWeight: FontWeight.w500)),
+                  trailing: Container(
+                    width: 30,
+                    height: 30,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                
+                    ),
+                    child: const Icon(
+                      Icons.arrow_forward_ios,
+                      size: 16,
+                      color: Colors.black,
+                    ),
+                  ),
+                  onTap: () {
+                    context.push("/NotificationSetting");
+                  },
                 ),
-                title: Text('Notification',
-                    style:
-                        TextStyle(fontSize: 25, fontWeight: FontWeight.w500)),
-                trailing: Image.asset(
-                  'assets/icons/arrow_right.png',
-                  width: 30,
-                  height: 30,
-                ),
-                onTap: () {
-                  context.push("/NotificationSetting");
-                },
               ),
             ),
             Card(
+              elevation: 0,
               color: Colors.white,
-              margin: EdgeInsets.only(bottom: 16),
-              elevation: 4,
+              margin: const EdgeInsets.only(bottom: 18),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(50),
+                side: const BorderSide(
+                  color: Color.fromARGB(255, 204, 204, 204),
+                  width: 1,
+                ),
               ),
-              child: ListTile(
-                leading: Image.asset(
-                  'assets/icons/About_Team_icon.png',
-                  width: 30,
-                  height: 30,
+              child: Padding(
+                padding: const EdgeInsets.all(4.0),
+                child: ListTile(
+                  leading: Container(
+                    width: 30,
+                    height: 30,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                
+                    ),
+                    child: const Icon(
+                      Icons.group,
+                      size: 26,
+                      color: Colors.black,
+                    ),
+                  ),
+                  title: Text('About Team',
+                      style:
+                          TextStyle(fontSize: 25, fontWeight: FontWeight.w500)),
+                  trailing: Container(
+                    width: 30,
+                    height: 30,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                
+                    ),
+                    child: const Icon(
+                      Icons.arrow_forward_ios,
+                      size: 16,
+                      color: Colors.black,
+                    ),
+                  ),
+                  onTap: () {
+                    context.push('/about');
+                  },
                 ),
-                title: Text('About Team',
-                    style:
-                        TextStyle(fontSize: 25, fontWeight: FontWeight.w500)),
-                trailing: Image.asset(
-                  'assets/icons/arrow_right.png',
-                  width: 30,
-                  height: 30,
-                ),
-                onTap: () {
-                  context.push('/about');
-                },
               ),
             ),
           ],
