@@ -55,29 +55,31 @@ class AboutTeamScreen extends StatelessWidget {
         appBar: CustomAppBar(),
         body: Padding(
           padding: const EdgeInsets.all(15.0),
-          child: Column(
-            children: [
-              Row(
-                children: [
-                  Text(
-                    'Meet our team',
-                    style: TextStyle(
-                      fontSize: 33,
-                      fontWeight: FontWeight.bold,
-                      decoration: TextDecoration.underline,
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                Row(
+                  children: [
+                    Text(
+                      'Meet our team',
+                      style: TextStyle(
+                        fontSize: 33,
+                        fontWeight: FontWeight.bold,
+                        decoration: TextDecoration.underline,
+                      ),
                     ),
-                  ),
-                  const Spacer(),
-                  CustomBackButton(),
-                ],
-              ),
-              // const SizedBox(height: 2),
-              Column(
-                children: teamMember.map((member) {
-                  return DevCard(member: member);
-                }).toList(),
-              )
-            ],
+                    const Spacer(),
+                    CustomBackButton(),
+                  ],
+                ),
+                // const SizedBox(height: 2),
+                Column(
+                  children: teamMember.map((member) {
+                    return DevCard(member: member);
+                  }).toList(),
+                )
+              ],
+            ),
           ),
         ),
         bottomNavigationBar: BottomNavBar(
