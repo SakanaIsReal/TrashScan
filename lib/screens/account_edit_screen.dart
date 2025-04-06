@@ -21,7 +21,7 @@ class _AccountEditScreenState extends State<AccountEditScreen> {
   final FocusNode _usernameFocusNode = FocusNode();
   File? _profileImage;
   final ImagePicker _picker = ImagePicker();
-
+  DateTime? _registrationDate;
   String? _usernameErrorText;
   String? _profileImageErrorText;
 
@@ -35,6 +35,7 @@ class _AccountEditScreenState extends State<AccountEditScreen> {
     final savedData = await UserStorage.loadUserData();
     if (savedData != null) {
       _usernameController.text = savedData.username;
+      _registrationDate = savedData.registrationDate;
       if (savedData.profileImagePath != null) {
         final file = File(savedData.profileImagePath!);
         if (await file.exists()) {
@@ -234,6 +235,7 @@ class _AccountEditScreenState extends State<AccountEditScreen> {
                       final userData = UserData(
                         username: newUsername,
                         profileImagePath: _profileImage?.path,
+                        registrationDate: _registrationDate,
                       );
 
                       await UserStorage.saveUserData(userData);
