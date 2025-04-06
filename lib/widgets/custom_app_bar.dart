@@ -1,5 +1,7 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import '../functions/user_data.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   const CustomAppBar({super.key});
@@ -26,11 +28,28 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
               ],
             ),
           ),
+
+        
           GestureDetector(
             onTap: () => context.push('/account'),
-            child: CircleAvatar(
-              backgroundColor: Colors.white,
-              child: Icon(Icons.person, color: Colors.black),
+            child: FutureBuilder<UserData?>(
+              future: UserStorage.loadUserData(),
+              builder: (context, snapshot) {
+                final userData = snapshot.data;
+
+                if (userData != null && userData.profileImagePath != null && File(userData.profileImagePath!).existsSync()) {
+                  return CircleAvatar(
+                    radius: 22,
+                    backgroundImage: FileImage(File(userData.profileImagePath!)),
+                  );
+                }
+
+                return const CircleAvatar(
+                  radius: 22,
+                  backgroundColor: Colors.white,
+                  child: Icon(Icons.person, color: Colors.black),
+                );
+              },
             ),
           ),
         ],
