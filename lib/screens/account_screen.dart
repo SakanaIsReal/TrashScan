@@ -4,16 +4,45 @@ import 'package:flutter_svg/flutter_svg.dart';
 import '../widgets/custom_app_bar.dart';
 import '../widgets/bottom_nav_bar.dart';
 import '../models/advancement_model.dart'; // Import your model
+import 'dart:io';
+import 'package:path_provider/path_provider.dart';
+import '../functions/user_data.dart';
 
 class AccountScreen extends StatefulWidget {
   const AccountScreen({super.key});
-
-  @override
+  
+  @override 
   _AccountScreenState createState() => _AccountScreenState();
+  
 }
 
 class _AccountScreenState extends State<AccountScreen> {
   // Get the current ongoing advancement (first incomplete one)
+  String _username = '';
+  File? _profileImageFile;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadUserData();
+  }
+
+  
+  Future<void> _loadUserData() async {
+    final savedData = await UserStorage.loadUserData();
+    if (savedData != null) {
+      setState(() {
+        _username = savedData.username;
+        if (savedData.profileImagePath != null) {
+          final file = File(savedData.profileImagePath!);
+          if (file.existsSync()) {
+            _profileImageFile = file;
+          }
+        }
+      });
+    }
+  }
+
   AdvancementModel? get currentAdvancement {
     final allAdvancements = AdvancementModel.getAdvancements();
     return allAdvancements.firstWhere(
@@ -98,7 +127,11 @@ class _AccountScreenState extends State<AccountScreen> {
                 ],
                 image: DecorationImage(
                   fit: BoxFit.cover,
-                  image: AssetImage('assets/images/profile_placeholder.png'),
+                  image: _profileImageFile != null
+                      ? FileImage(_profileImageFile!)
+                      : const AssetImage(
+                              'assets/profile/profile_placeholder.png')
+                          as ImageProvider,
                 ),
               ),
             ),
@@ -106,8 +139,8 @@ class _AccountScreenState extends State<AccountScreen> {
               height: 16,
             ),
             Text(
-              "Krittanon",
-              style: TextStyle(fontSize: 64, fontWeight: FontWeight.bold),
+              _username.isNotEmpty ? _username : "Unnamed",
+              style: TextStyle(fontSize: 50, fontWeight: FontWeight.bold),
             ),
             // SizedBox(height: 8,),
             Container(
