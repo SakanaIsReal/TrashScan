@@ -4,6 +4,9 @@ import 'package:image_picker/image_picker.dart';
 import 'package:trashscan/widgets/custom_back_button.dart';
 import '../widgets/custom_app_bar.dart';
 import '../widgets/bottom_nav_bar.dart';
+import 'package:path_provider/path_provider.dart';
+import '../functions/user_data.dart';
+import 'package:go_router/go_router.dart';
 
 class AccountEditScreen extends StatefulWidget {
   const AccountEditScreen({super.key});
@@ -19,17 +22,49 @@ class _AccountEditScreenState extends State<AccountEditScreen> {
   File? _profileImage;
   final ImagePicker _picker = ImagePicker();
 
+  @override
+  void initState() {
+    super.initState();
+    _loadUserData();
+  }
+
+  Future<void> _loadUserData() async {
+    final savedData = await UserStorage.loadUserData();
+    if (savedData != null) {
+      _usernameController.text = savedData.username;
+      if (savedData.profileImagePath != null) {
+        final file = File(savedData.profileImagePath!);
+        if (await file.exists()) {
+          setState(() {
+            _profileImage = file;
+          });
+        }
+      }
+    }
+  }
+
   Future<void> _pickImage() async {
     try {
       final XFile? pickedFile = await _picker.pickImage(
         source: ImageSource.gallery,
         maxWidth: 500,
         maxHeight: 500,
-        imageQuality: 90);
+        imageQuality: 90,
+      );
 
       if (pickedFile != null) {
+        final directory = await getApplicationDocumentsDirectory();
+        final profileDir = Directory('${directory.path}/profile');
+        if (!await profileDir.exists()) {
+          await profileDir.create(recursive: true);
+        }
+
+        final fileName = 'profile_${DateTime.now().millisecondsSinceEpoch}.jpg';
+        final savedImage =
+            await File(pickedFile.path).copy('${profileDir.path}/$fileName');
+
         setState(() {
-          _profileImage = File(pickedFile.path);
+          _profileImage = savedImage;
         });
       }
     } catch (e) {
@@ -105,7 +140,7 @@ class _AccountEditScreenState extends State<AccountEditScreen> {
                             : const DecorationImage(
                                 fit: BoxFit.cover,
                                 image: AssetImage(
-                                    'assets/images/profile_placeholder.png'),
+                                    'assets/profile/profile_placeholder.png'),
                               ),
                       ),
                     ),
@@ -251,12 +286,38 @@ class _AccountEditScreenState extends State<AccountEditScreen> {
                   ),
                   const SizedBox(width: 8),
                   GestureDetector(
-                    onTap: () {
-                      final newUsername = _usernameController.text;
-                      // TODO: Implement save functionality including the image
-                      // You would typically upload the image to a server here
-                      if (_profileImage != null) {
-                        // Handle the image file
+                    onTap: () async {
+                      final newUsername = _usernameController.text.trim();
+                      final isTooLong = newUsername.length > 10;
+                      final isNotEnglish =
+                          !RegExp(r'^[a-zA-Z0-9_]+$').hasMatch(newUsername);
+
+                      if (isTooLong && isNotEnglish) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text(
+                                "❗ Username must be English only and no more than 10 characters."),
+                            behavior: SnackBarBehavior.floating,
+                          ),
+                        );
+                        return; 
+                      }
+
+                      final userData = UserData(
+                        username: newUsername,
+                        profileImagePath: _profileImage?.path,
+                      );
+
+                      await UserStorage.saveUserData(userData);
+
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text("✅ Saved successfully!")),
+                      );
+
+                      await Future.delayed(const Duration(seconds: 1));
+
+                      if (context.mounted) {
+                        context.push('/account');
                       }
                     },
                     child: Container(
