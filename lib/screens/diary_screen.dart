@@ -4,7 +4,7 @@ import '../widgets/custom_app_bar.dart';
 import '../widgets/bottom_nav_bar.dart';
 import '../widgets/diary_summary.dart';
 import '../widgets/trash_calendar.dart';
-import '../functions/dirary_storage.dart';
+import '../functions/diary_storage.dart';
 import 'package:collection/collection.dart';
 import '../models/trash_information_model.dart';
 
@@ -71,7 +71,7 @@ class _DiaryScreenState extends State<DiaryScreen> {
                       padding: const EdgeInsets.all(24.0),
                       child: DiarySummary(
                         fontSize: 16.0,
-                        summaryItems: snapshot.data!,
+                        specificDate: null, 
                       ),
                     ),
                   ),
@@ -85,4 +85,3 @@ class _DiaryScreenState extends State<DiaryScreen> {
     );
   }
 }
-
