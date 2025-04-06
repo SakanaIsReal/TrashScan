@@ -3,6 +3,9 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'bottom_nav_bar.dart';
 import '../models/trash_information_model.dart';
 import '../widgets/pcs_total_badge.dart';
+import 'package:go_router/go_router.dart';
+import '../functions/dirary_storage.dart';
+import 'package:flutter/services.dart';
 
 enum InfoSheetType { loading, information, error }
 
@@ -14,24 +17,24 @@ class InfoSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: MediaQuery.of(context).size.height * 1, // Adjust as needed
-      // padding: const EdgeInsets.symmetric(horizontal: 36.0),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Expanded(
-            // Ensures content takes up available space, pushing BottomNavBar down
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 36.0),
-              child: SingleChildScrollView(
-                child: Container(child: _buildContent(context)),
+    return Scaffold(
+      backgroundColor: Colors.transparent,
+      body: SafeArea(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 36.0),
+                child: SingleChildScrollView(
+                  child: Container(child: _buildContent(context)),
+                ),
               ),
             ),
-          ),
-          const SizedBox(height: 10),
-          BottomNavBar(selectedIndex: -1),
-        ],
+            const SizedBox(height: 10),
+            BottomNavBar(selectedIndex: -1),
+          ],
+        ),
       ),
     );
   }
@@ -40,7 +43,6 @@ class InfoSheet extends StatelessWidget {
     switch (type) {
       case InfoSheetType.loading:
         return Center(
-          // Centers content in available space
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -88,24 +90,21 @@ class InfoSheet extends StatelessWidget {
           children: [
             SvgPicture.asset('assets/icons/trash_diary.svg'),
             SvgPicture.asset('assets/icons/arrow_right.svg'),
-            GestureDetector(
-                onTap: () {print('Button pressed!');}, // add diary here
-                child: SvgPicture.asset('assets/icons/click_here_button.svg')),
+            _ClaimPointButton(trashId: trash_id),
           ],
         ),
         const SizedBox(height: 24),
         GestureDetector(
           onTap: () {
-            // Handle button press
+            context.push('/map', extra: trash_id);
             print('Button pressed!');
           },
           child: Container(
             padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
             decoration: BoxDecoration(
-              color: Theme.of(context).primaryColor, // Background color
-              borderRadius: BorderRadius.circular(20), // Rounded corners
+              color: Theme.of(context).primaryColor,
+              borderRadius: BorderRadius.circular(20),
               boxShadow: [
-                // Optional shadow
                 BoxShadow(
                   color: Colors.black.withOpacity(0.1),
                   blurRadius: 6,
@@ -180,14 +179,96 @@ class InfoSheet extends StatelessWidget {
   }
 }
 
+class _ClaimPointButton extends StatefulWidget {
+  final int trashId;
+
+  const _ClaimPointButton({super.key, required this.trashId});
+
+  @override
+  State<_ClaimPointButton> createState() => _ClaimPointButtonState();
+}
+
+class _ClaimPointButtonState extends State<_ClaimPointButton> {
+  bool hasClaimed = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () async {
+        if (hasClaimed) return;
+
+        setState(() => hasClaimed = true);
+
+        final trashCategory =
+            TrashInformationModel.getCategoryById(widget.trashId);
+
+        // ✅ เพิ่ม 1 แต้มในวันปัจจุบัน และรับค่ารวมของขยะนี้ในวันนี้กลับมา
+        final updated =
+            await DiaryStorage.addPointForTrashId(widget.trashId.toString());
+
+        _showTopToast(
+          context,
+          'คุณได้รับแต้มสำหรับ "${trashCategory?.name ?? 'ขยะนี้'}" แล้ว\nรวมวันนี้: $updated แต้ม',
+        );
+      },
+      child: Opacity(
+        opacity: hasClaimed ? 0.5 : 1.0,
+        child: SvgPicture.asset('assets/icons/click_here_button.svg'),
+      ),
+    );
+  }
+
+  void _showTopToast(BuildContext context, String message) {
+    HapticFeedback.mediumImpact();
+    final overlay = Overlay.of(context);
+    final overlayEntry = OverlayEntry(
+      builder: (context) => Positioned(
+        top: 40,
+        left: 20,
+        right: 20,
+        child: Material(
+          color: Colors.transparent,
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            decoration: BoxDecoration(
+              color: Colors.black87,
+              borderRadius: BorderRadius.circular(12),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black26,
+                  blurRadius: 8,
+                  offset: Offset(0, 4),
+                ),
+              ],
+            ),
+            child: Text(
+              message,
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 16,
+                letterSpacing: 0.5,
+              ),
+              textAlign: TextAlign.center,
+            ),
+          ),
+        ),
+      ),
+    );
+
+    overlay.insert(overlayEntry);
+    Future.delayed(const Duration(seconds: 3), () {
+      overlayEntry.remove();
+    });
+  }
+}
+
 SizedBox buildTags(List<String> tags, Color color) {
   return SizedBox(
-    height: 40, // Fixed height to prevent overflow
+    height: 40,
     child: ListView.separated(
       scrollDirection: Axis.horizontal,
       shrinkWrap: true,
-      physics: const BouncingScrollPhysics(), // iOS-style scrolling
-      // padding: const EdgeInsets.symmetric(horizontal: 12), // Outer padding
+      physics: const BouncingScrollPhysics(),
       itemCount: tags.length,
       separatorBuilder: (context, index) => const SizedBox(width: 8),
       itemBuilder: (context, index) => Chip(
@@ -204,10 +285,8 @@ SizedBox buildTags(List<String> tags, Color color) {
           ),
         ),
         backgroundColor: color,
-        padding:
-            const EdgeInsets.symmetric(horizontal: 10), // Inner chip padding
-        materialTapTargetSize:
-            MaterialTapTargetSize.shrinkWrap, // Compact touch target
+        padding: const EdgeInsets.symmetric(horizontal: 10),
+        materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
       ),
     ),
   );
