@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../functions/diary_storage.dart'; 
 
 class AdvancementModel {
   final int id;
@@ -18,6 +19,22 @@ class AdvancementModel {
     required this.progress,
     required this.color,
   });
+
+  static List<AdvancementModel> getAdvancementsWithProgress(int totalPoints) {
+    final advancements = getAdvancements();
+
+    return advancements.map((adv) {
+      return AdvancementModel(
+        id: adv.id,
+        title: adv.title,
+        targetScan: adv.targetScan,
+        description: adv.description,
+        svgPath: adv.svgPath,
+        progress: totalPoints,
+        color: adv.color,
+      );
+    }).toList();
+  }
 
   // Static method to get all advancements
   static List<AdvancementModel> getAdvancements() {
@@ -98,7 +115,8 @@ class AdvancementModel {
   // Get advancement by ID
   static AdvancementModel? getAdvancementById(int id) {
     try {
-      return getAdvancements().firstWhere((advancement) => advancement.id == id);
+      return getAdvancements()
+          .firstWhere((advancement) => advancement.id == id);
     } catch (e) {
       return null;
     }
@@ -109,5 +127,26 @@ class AdvancementModel {
     return getAdvancements().where((advancement) {
       return minProgress == null || advancement.progress >= minProgress;
     }).toList();
+  }
+
+  static Future<AdvancementModel?> getCurrentAdvancement() async {
+    final totalPoints = await DiaryStorage.getTotalPoints();
+    final all = getAdvancements();
+
+    for (final adv in all) {
+      if (totalPoints < adv.targetScan) {
+        return AdvancementModel(
+          id: adv.id,
+          title: adv.title,
+          targetScan: adv.targetScan,
+          description: adv.description,
+          svgPath: adv.svgPath,
+          progress: totalPoints,
+          color: adv.color,
+        );
+      }
+    }
+
+    return null; // ถ้าปลดครบแล้ว
   }
 }
