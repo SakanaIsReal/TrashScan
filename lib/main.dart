@@ -163,20 +163,7 @@ class MyApp extends StatelessWidget {
         // Add a debug button overlay in debug mode
         return Stack(
           children: [
-            child!,
-            if (kDebugMode)
-              Positioned(
-                bottom: 20,
-                right: 20,
-                child: FloatingActionButton(
-                  onPressed: () async {
-                    debugPrint('🎯 Manually triggering test notification...');
-                    await _sendTestNotification();
-                    await scheduleDailyNotification();
-                  },
-                  child: const Icon(Icons.notification_add),
-                ),
-              ),
+            child!
           ],
         );
       },
