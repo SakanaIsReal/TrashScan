@@ -1,30 +1,67 @@
 import 'package:flutter/material.dart';
+import '../models/trash_information_model.dart';
+import '../functions/diary_storage.dart';
 import '../widgets/pcs_total_badge.dart';
 
-class DiarySummary extends StatelessWidget {
+class DiarySummary extends StatefulWidget {
   final double fontSize;
-  final List<SummaryItem> summaryItems;
   final String divider;
+  final DateTime? specificDate; // null = ทั้งหมด, ไม่ null = วันนั้น ๆ
 
   const DiarySummary({
     super.key,
     this.fontSize = 16.0,
     this.divider = '. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .',
-    this.summaryItems = const [ // Mark the list as `const`
-    SummaryItem('Plastic', 0),
-    SummaryItem('Metal', 0),
-    SummaryItem('Glass', 0),
-    SummaryItem('Paper', 0),
-    SummaryItem('Organic Waste', 0),
-    SummaryItem('Textiles', 0),
-    SummaryItem('E-waste', 0),
-    SummaryItem('Hazardous Waste', 0),
-    SummaryItem('Miscellaneous', 0),
-  ],
-});
+    this.specificDate,
+  });
+
+  @override
+  State<DiarySummary> createState() => _DiarySummaryState();
+}
+
+class _DiarySummaryState extends State<DiarySummary> {
+  List<SummaryItem> _summaryItems = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _loadSummaryData();
+  }
+
+  Future<void> _loadSummaryData() async {
+    final diaryData = widget.specificDate != null
+        ? await DiaryStorage.loadDiaryForDate(widget.specificDate!)
+        : await _mergeAllDiary();
+
+    final categories = TrashInformationModel.getCategories();
+
+    final List<SummaryItem> summary = categories.map((cat) {
+      final count = diaryData[cat.id.toString()] ?? 0;
+      return SummaryItem(cat.name, count);
+    }).toList();
+
+    setState(() {
+      _summaryItems = summary;
+    });
+  }
+
+  Future<Map<String, int>> _mergeAllDiary() async {
+    final all = await DiaryStorage.loadFullDiary();
+    final Map<String, int> merged = {};
+
+    for (final dailyData in all.values) {
+      dailyData.forEach((key, value) {
+        merged[key] = (merged[key] ?? 0) + value;
+      });
+    }
+
+    return merged;
+  }
 
   @override
   Widget build(BuildContext context) {
+    final total = _summaryItems.fold<int>(0, (sum, item) => sum + item.count);
+
     return Container(
       child: Column(
         children: [
@@ -35,11 +72,13 @@ class DiarySummary extends StatelessWidget {
                 'Summary',
                 style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
               ),
-              PcsTotalBadge(count: 1, color: Theme.of(context).primaryColor)
+              PcsTotalBadge(count: total, color: Theme.of(context).primaryColor)
             ],
           ),
           Column(
-            children: summaryItems.map((item) => _buildSummaryRow(item.name, item.count)).toList(),
+            children: _summaryItems
+                .map((item) => _buildSummaryRow(item.name, item.count))
+                .toList(),
           )
         ],
       ),
@@ -50,8 +89,8 @@ class DiarySummary extends StatelessWidget {
     return Stack(
       children: [
         Text(
-          divider,
-          style: TextStyle(fontSize: fontSize),
+          widget.divider,
+          style: TextStyle(fontSize: widget.fontSize),
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -62,7 +101,7 @@ class DiarySummary extends StatelessWidget {
                 padding: const EdgeInsets.only(right: 4.0),
                 child: Text(
                   name,
-                  style: TextStyle(fontSize: fontSize),
+                  style: TextStyle(fontSize: widget.fontSize),
                 ),
               ),
             ),
@@ -72,7 +111,8 @@ class DiarySummary extends StatelessWidget {
                 padding: const EdgeInsets.only(left: 4.0),
                 child: Text(
                   '$count pcs.',
-                  style: TextStyle(fontSize: fontSize, fontWeight: FontWeight.bold),
+                  style: TextStyle(
+                      fontSize: widget.fontSize, fontWeight: FontWeight.bold),
                 ),
               ),
             ),
