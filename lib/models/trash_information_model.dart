@@ -374,7 +374,7 @@ class TrashInformationModel {
 
     categories.add(TrashInformationModel(
       id: 7,
-      name: 'Metal',
+      name: 'Metal Waste',
       tags: ['Recyclable', 'Aluminum', 'Steel'],
       description: RichText(
         text: TextSpan(
