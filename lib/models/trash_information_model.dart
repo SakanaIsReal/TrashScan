@@ -258,7 +258,7 @@ class TrashInformationModel {
 
     categories.add(TrashInformationModel(
       id: 5,
-      name: 'Organic Waste',
+      name: 'Organic',
       tags: ['Compostable', 'Food', 'Yard'],
       description: RichText(
         text: TextSpan(
