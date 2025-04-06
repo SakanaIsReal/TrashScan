@@ -22,6 +22,9 @@ class _AccountEditScreenState extends State<AccountEditScreen> {
   File? _profileImage;
   final ImagePicker _picker = ImagePicker();
 
+  String? _usernameErrorText;
+  String? _profileImageErrorText;
+
   @override
   void initState() {
     super.initState();
@@ -65,12 +68,13 @@ class _AccountEditScreenState extends State<AccountEditScreen> {
 
         setState(() {
           _profileImage = savedImage;
+          _profileImageErrorText = null;
         });
       }
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Failed to pick image: ${e.toString()}')),
-      );
+      setState(() {
+        _profileImageErrorText = "Failed to pick image: ${e.toString()}";
+      });
     }
   }
 
@@ -94,17 +98,11 @@ class _AccountEditScreenState extends State<AccountEditScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  const Icon(
-                    Icons.account_circle,
-                    size: 40,
-                  ),
+                  const Icon(Icons.account_circle, size: 40),
                   const SizedBox(width: 4),
                   const Text(
                     'Account',
-                    style: TextStyle(
-                      fontSize: 33,
-                      fontWeight: FontWeight.bold,
-                    ),
+                    style: TextStyle(fontSize: 33, fontWeight: FontWeight.bold),
                   ),
                   const Spacer(),
                   CustomBackButton(),
@@ -120,16 +118,12 @@ class _AccountEditScreenState extends State<AccountEditScreen> {
                       height: 180,
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
-                        border: Border.all(
-                          color: Colors.white,
-                          width: 5.0,
-                        ),
+                        border: Border.all(color: Colors.white, width: 5.0),
                         boxShadow: [
                           BoxShadow(
                             color: Colors.black.withOpacity(0.2),
                             spreadRadius: 4,
                             blurRadius: 5,
-                            offset: Offset(0, 0),
                           )
                         ],
                         image: _profileImage != null
@@ -155,152 +149,86 @@ class _AccountEditScreenState extends State<AccountEditScreen> {
                           border: Border.all(width: 6, color: Colors.white),
                           color: Theme.of(context).primaryColor,
                         ),
-                        child: const Icon(
-                          Icons.edit,
-                          color: Colors.white,
-                          size: 30,
-                        ),
+                        child: const Icon(Icons.edit, color: Colors.white, size: 30),
                       ),
                     )
                   ],
                 ),
               ),
-              const SizedBox(height: 42),
-              Container(
-                height: 70,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(26),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.1),
-                      spreadRadius: 2,
-                      blurRadius: 5,
-                      offset: Offset(0, 0),
-                    )
-                  ],
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      const Icon(Icons.person, size: 50),
-                      const SizedBox(width: 8),
-                      Expanded(
-                        child: SizedBox(
-                          height: 40,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const Text("Username",
-                                  style: TextStyle(fontSize: 12)),
-                              Expanded(
-                                child: TextField(
-                                  controller: _usernameController,
-                                  focusNode: _usernameFocusNode,
-                                  style: const TextStyle(fontSize: 18),
-                                  decoration: InputDecoration(
-                                    enabledBorder: const UnderlineInputBorder(
-                                      borderSide:
-                                          BorderSide(color: Colors.grey),
-                                    ),
-                                    focusedBorder: UnderlineInputBorder(
-                                      borderSide: BorderSide(
-                                        color: Theme.of(context).primaryColor,
-                                      ),
-                                    ),
-                                    contentPadding: EdgeInsets.zero,
-                                    isDense: true,
-                                    border: InputBorder.none,
-                                    hintText: 'Enter username',
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      IconButton(
-                        icon: Container(
-                          width: 20,
-                          height: 20,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: Colors.grey[300],
-                          ),
-                          child: const Icon(
-                            Icons.close,
-                            size: 16,
-                            color: Colors.black,
-                          ),
-                        ),
-                        onPressed: () {
-                          _usernameController.clear();
-                          setState(() {});
-                        },
-                      )
-                    ],
+              if (_profileImageErrorText != null)
+                Padding(
+                  padding: const EdgeInsets.only(top: 8.0),
+                  child: Text(
+                    _profileImageErrorText!,
+                    style: TextStyle(color: Colors.red, fontWeight: FontWeight.w500),
                   ),
+                ),
+              const SizedBox(height: 42),
+              TextField(
+                controller: _usernameController,
+                focusNode: _usernameFocusNode,
+                style: const TextStyle(fontSize: 18),
+                decoration: InputDecoration(
+                  labelText: "Username",
+                  hintText: "Enter username",
+                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(16)),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(16),
+                    borderSide: BorderSide(
+                      color: _usernameErrorText != null ? Colors.red : Colors.grey,
+                    ),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(16),
+                    borderSide: BorderSide(
+                      color: _usernameErrorText != null
+                          ? Colors.red
+                          : Theme.of(context).primaryColor,
+                    ),
+                  ),
+                  errorText: _usernameErrorText,
+                  contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
                 ),
               ),
               const SizedBox(height: 20),
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  GestureDetector(
-                    onTap: () {
+                  TextButton(
+                    onPressed: () {
                       _usernameController.text = "";
                       setState(() {
                         _profileImage = null;
                       });
                     },
-                    child: Container(
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                            width: 2, color: Theme.of(context).primaryColor),
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(14),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.1),
-                            spreadRadius: 1,
-                            blurRadius: 5,
-                            offset: Offset(0, 0),
-                          )
-                        ],
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.only(
-                            left: 14.0, right: 14, top: 6, bottom: 6),
-                        child: Text(
-                          'Revert',
-                          style: TextStyle(
-                              color: Theme.of(context).primaryColor,
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                    ),
+                    child: const Text("Revert"),
                   ),
                   const SizedBox(width: 8),
-                  GestureDetector(
-                    onTap: () async {
+                  ElevatedButton(
+                    onPressed: () async {
                       final newUsername = _usernameController.text.trim();
                       final isTooLong = newUsername.length > 10;
-                      final isNotEnglish =
-                          !RegExp(r'^[a-zA-Z0-9_]+$').hasMatch(newUsername);
+                      final isNotEnglish = !RegExp(r'^[a-zA-Z0-9_]+$').hasMatch(newUsername);
+                      setState(() {
+                        _usernameErrorText = null;
+                        _profileImageErrorText = null;
+                      });
 
-                      if (isTooLong && isNotEnglish) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text(
-                                "❗ Username must be English only and no more than 10 characters."),
-                            behavior: SnackBarBehavior.floating,
-                          ),
-                        );
-                        return; 
+                      // if (_profileImage == null) {
+                      //   setState(() => _profileImageErrorText =
+                      //       "Profile image upload failed. Please try again.");
+                      //   return;
+                      // }
+
+                      if (isTooLong || isNotEnglish) {
+                        setState(() {
+                          _usernameErrorText = isTooLong && isNotEnglish
+                              ? "Username can only contain English letters and must not exceed 10 characters."
+                              : isTooLong
+                                  ? "Username must not exceed 10 characters."
+                                  : "Username can only contain English letters.";
+                        });
+                        return;
                       }
 
                       final userData = UserData(
@@ -315,38 +243,11 @@ class _AccountEditScreenState extends State<AccountEditScreen> {
                       );
 
                       await Future.delayed(const Duration(seconds: 1));
-
                       if (context.mounted) {
                         context.push('/account');
                       }
                     },
-                    child: Container(
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                            width: 2, color: Theme.of(context).primaryColor),
-                        color: Theme.of(context).primaryColor,
-                        borderRadius: BorderRadius.circular(14),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.1),
-                            spreadRadius: 1,
-                            blurRadius: 5,
-                            offset: Offset(0, 0),
-                          )
-                        ],
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.only(
-                            left: 16.0, right: 16, top: 6, bottom: 6),
-                        child: const Text(
-                          'Save',
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                    ),
+                    child: const Text("Save"),
                   ),
                 ],
               )
@@ -354,9 +255,7 @@ class _AccountEditScreenState extends State<AccountEditScreen> {
           ),
         ),
       ),
-      bottomNavigationBar: BottomNavBar(
-        selectedIndex: 0,
-      ),
+      bottomNavigationBar: BottomNavBar(selectedIndex: 0),
     );
   }
 }
