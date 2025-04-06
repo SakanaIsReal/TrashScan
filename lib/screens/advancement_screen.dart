@@ -3,7 +3,8 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:trashscan/widgets/custom_back_button.dart';
 import '../widgets/custom_app_bar.dart';
 import '../widgets/bottom_nav_bar.dart';
-import '../models/advancement_model.dart'; // Import your model
+import '../models/advancement_model.dart';
+import '../functions/diary_storage.dart'; 
 
 class AdvancementScreen extends StatefulWidget {
   const AdvancementScreen({super.key});
@@ -13,31 +14,38 @@ class AdvancementScreen extends StatefulWidget {
 }
 
 class _AdvancementScreenState extends State<AdvancementScreen> {
+  List<AdvancementModel> advancements = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _loadAdvancements();
+  }
+
+  Future<void> _loadAdvancements() async {
+    final totalPoints = await DiaryStorage.getTotalPoints();
+    final adv = AdvancementModel.getAdvancementsWithProgress(totalPoints);
+
+    setState(() {
+      advancements = adv;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    final advancements = AdvancementModel.getAdvancements();
-
     return Scaffold(
       appBar: CustomAppBar(),
       body: Padding(
-        padding: const EdgeInsets.only(top: 20.0, left: 20.0, right: 20.0, ),
+        padding: const EdgeInsets.only(top: 20.0, left: 20.0, right: 20.0),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Row(
-              mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                const Icon(
-                  Icons.emoji_events,
-                  size: 40,
-                ),
+                const Icon(Icons.emoji_events, size: 40),
                 const SizedBox(width: 4),
                 const Text(
                   'Achievements',
-                  style: TextStyle(
-                    fontSize: 33,
-                    fontWeight: FontWeight.bold,
-                  ),
+                  style: TextStyle(fontSize: 33, fontWeight: FontWeight.bold),
                 ),
                 const Spacer(),
                 CustomBackButton(),
@@ -48,27 +56,24 @@ class _AdvancementScreenState extends State<AdvancementScreen> {
               child: ListView.builder(
                 itemCount: advancements.length,
                 itemBuilder: (context, index) {
-                  final advancement = advancements[index];
-                  final isCompleted = advancement.progress >= advancement.targetScan;
-                  
+                  final adv = advancements[index];
+                  final isCompleted = adv.progress >= adv.targetScan;
+
                   return Container(
                     height: 140,
                     margin: const EdgeInsets.only(bottom: 20),
                     decoration: BoxDecoration(
+                      color: adv.color,
+                      borderRadius: BorderRadius.circular(20),
                       boxShadow: [
                         BoxShadow(
                           color: Colors.black.withOpacity(0.1),
                           spreadRadius: 2,
                           blurRadius: 5,
-                          offset: const Offset(0, 0),
                         )
                       ],
-                      borderRadius: BorderRadius.circular(20),
-                      color: advancement.color,
                     ),
                     child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Padding(
                           padding: const EdgeInsets.all(16),
@@ -76,20 +81,19 @@ class _AdvancementScreenState extends State<AdvancementScreen> {
                             height: 100,
                             width: 100,
                             decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(20),
                               boxShadow: [
                                 BoxShadow(
                                   color: Colors.black.withOpacity(0.1),
                                   spreadRadius: 2,
                                   blurRadius: 5,
-                                  offset: const Offset(0, 0),
                                 )
                               ],
-                              borderRadius: BorderRadius.circular(20),
-                              color: Colors.white,
                             ),
                             child: Padding(
                               padding: const EdgeInsets.all(14.0),
-                              child: SvgPicture.asset(advancement.svgPath),
+                              child: SvgPicture.asset(adv.svgPath),
                             ),
                           ),
                         ),
@@ -98,19 +102,17 @@ class _AdvancementScreenState extends State<AdvancementScreen> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Text(
-                                advancement.title,
+                                adv.title,
                                 style: TextStyle(
-                                  shadows: [
-                                BoxShadow(
-                                  color: Colors.black.withOpacity(0.1),
-                                  spreadRadius: 2,
-                                  blurRadius: 5,
-                                  offset: const Offset(0, 0),
-                                )
-                              ],
-                                  fontWeight: FontWeight.bold,
                                   fontSize: 28,
-                                  color: Colors.white
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                  shadows: [
+                                    BoxShadow(
+                                      color: Colors.black.withOpacity(0.1),
+                                      blurRadius: 5,
+                                    )
+                                  ],
                                 ),
                               ),
                               const SizedBox(height: 6),
@@ -118,23 +120,21 @@ class _AdvancementScreenState extends State<AdvancementScreen> {
                                 height: 40,
                                 width: 140,
                                 decoration: BoxDecoration(
-                                  color: isCompleted ? advancement.color : Colors.white,
+                                  color: isCompleted ? adv.color : Colors.white,
                                   borderRadius: BorderRadius.circular(20),
-                                  border: Border.all(
-                                    color: Colors.white,
-                                    width: 3.0,
-                                  ),
+                                  border: Border.all(color: Colors.white, width: 3),
                                 ),
                                 child: Center(
                                   child: Text(
-                                    isCompleted 
-                                      ? "DONE" 
-                                      : "${advancement.progress}/${advancement.targetScan}",
+                                    isCompleted
+                                        ? "DONE"
+                                        : "${adv.progress}/${adv.targetScan}",
                                     style: TextStyle(
                                       color: isCompleted ? Colors.white : Colors.black,
                                       fontWeight: FontWeight.bold,
                                       fontSize: isCompleted ? 22 : 26,
-                                      fontStyle: isCompleted ? FontStyle.italic : FontStyle.normal,
+                                      fontStyle:
+                                          isCompleted ? FontStyle.italic : FontStyle.normal,
                                     ),
                                   ),
                                 ),
@@ -151,9 +151,7 @@ class _AdvancementScreenState extends State<AdvancementScreen> {
           ],
         ),
       ),
-      bottomNavigationBar: BottomNavBar(
-        selectedIndex: 4,
-      ),
+      bottomNavigationBar: BottomNavBar(selectedIndex: 4),
     );
   }
 }
