@@ -34,7 +34,10 @@ final GoRouter appRouter = GoRouter(
     ),
     GoRoute(
       path: '/map',
-      builder: (context, state) => MapScreen(),
+      builder: (context, state) {
+        final int? trashId = state.extra as int?;
+        return MapScreen(targetTrashId: trashId);
+      },
     ),
     GoRoute(
       path: '/settings',
