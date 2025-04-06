@@ -32,7 +32,7 @@ class TrashInformationModel {
     List<TrashInformationModel> categories = [];
 
     categories.add(TrashInformationModel(
-      id: 1,
+      id: 7,
       name: 'Plastics',
       tags: ['Recyclable', 'PET', 'HDPE'],
       description: RichText(
