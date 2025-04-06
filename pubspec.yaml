@@ -51,7 +51,9 @@ dependencies:
   bitmap: ^0.2.0
   flutter_local_notifications: ^19.0.0
   timezone: ^0.10.0
-
+  path_provider: ^2.1.1
+  path: ^1.9.0
+  http: ^1.2.1
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -78,6 +80,7 @@ flutter:
   assets:
     - assets/icons/
     - assets/images/
+    - assets/profile/
     - .env
 
   # An image asset can refer to one or more resolution-specific "variants", see
