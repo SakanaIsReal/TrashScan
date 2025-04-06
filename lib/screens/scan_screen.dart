@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:trashscan/widgets/camera_nav_bar.dart';
 import '../widgets/custom_app_bar.dart';
+import 'package:http/http.dart' as http;
 // import '../widgets/bottom_nav_bar.dart';
 // import '../widgets/background_camera.dart';
 import '../widgets/custom_back_button.dart';
@@ -87,7 +88,10 @@ class _ScanScreenState extends State<ScanScreen> {
           ),
         ],
       ),
-      bottomNavigationBar: CameraNavBar(),
+      bottomNavigationBar:
+          cameraController != null && cameraController!.value.isInitialized
+              ? CameraNavBar(cameraController: cameraController!)
+              : const SizedBox.shrink(),
     );
   }
 
