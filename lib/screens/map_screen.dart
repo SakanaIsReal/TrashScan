@@ -15,6 +15,10 @@ import '../widgets/info_sheet.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class MapScreen extends StatefulWidget {
+  final int? targetTrashId;
+
+  const MapScreen({super.key, this.targetTrashId});
+
   @override
   _MapScreenState createState() => _MapScreenState();
 }
@@ -33,8 +37,26 @@ class _MapScreenState extends State<MapScreen> {
   @override
   void initState() {
     super.initState();
-    _getCurrentLocation();
-    _loadMarkerIcons();
+
+    _getCurrentLocation().then((_) {
+      _loadMarkerIcons();
+
+      if (widget.targetTrashId != null) {
+        final category =
+            TrashInformationModel.getCategoryById(widget.targetTrashId!);
+        if (category != null) {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            moveToNearestTrash(category);
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text("🗺️ Navigating to nearest ${category.name} bin"),
+                behavior: SnackBarBehavior.floating,
+              ),
+            );
+          });
+        }
+      }
+    });
   }
 
   Future<void> _loadMarkerIcons() async {
@@ -120,6 +142,34 @@ class _MapScreenState extends State<MapScreen> {
     setState(() {
       _markers = newMarkers;
     });
+  }
+
+  void moveToNearestTrash(TrashInformationModel category) {
+    if (_sourceLocation == null || category.trashLoc == null) return;
+
+    double minDistance = double.infinity;
+    LatLng? nearest;
+
+    for (LatLng loc in category.trashLoc!) {
+      final distance = Geolocator.distanceBetween(
+        _sourceLocation.latitude,
+        _sourceLocation.longitude,
+        loc.latitude,
+        loc.longitude,
+      );
+
+      if (distance < minDistance) {
+        minDistance = distance;
+        nearest = loc;
+      }
+    }
+
+    if (nearest != null) {
+      _mapController?.animateCamera(
+        CameraUpdate.newLatLngZoom(nearest, 19.0),
+      );
+      _getPolyline(nearest); // Optional: วาดเส้นทางไปยังถังขยะ
+    }
   }
 
   void _showTrashInfoDialog(
@@ -237,120 +287,125 @@ class _MapScreenState extends State<MapScreen> {
     }
   }
 
-@override
-Widget build(BuildContext context) {
-  return Scaffold(
-    appBar: CustomAppBar(),
-    body: Stack(
-      children: [
-        // Google Map should be first in the stack
-        GoogleMap(
-          initialCameraPosition: CameraPosition(
-            target: _sourceLocation,
-            zoom: 19.0,
-          ),
-          markers: _markers,
-          polylines: _polylines,
-          onMapCreated: (GoogleMapController controller) {
-            _mapController = controller;
-            _updateMarkers();
-          },
-          myLocationEnabled: true,
-          myLocationButtonEnabled: true,
-          gestureRecognizers: <Factory<OneSequenceGestureRecognizer>>{
-            Factory<OneSequenceGestureRecognizer>(
-              () => EagerGestureRecognizer(),
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: CustomAppBar(),
+      body: Stack(
+        children: [
+          // Google Map should be first in the stack
+          GoogleMap(
+            initialCameraPosition: CameraPosition(
+              target: _sourceLocation,
+              zoom: 19.0,
             ),
-          },
-        ),
-        // Position the legend button above the map
-        Positioned(
-          right: 4,
-          top: 64,
-          child: Column(
-            children: [
-              _buildLegendButton(),
-            ],
+            markers: _markers,
+            polylines: _polylines,
+            onMapCreated: (GoogleMapController controller) {
+              _mapController = controller;
+              _updateMarkers();
+            },
+            myLocationEnabled: true,
+            myLocationButtonEnabled: true,
+            gestureRecognizers: <Factory<OneSequenceGestureRecognizer>>{
+              Factory<OneSequenceGestureRecognizer>(
+                () => EagerGestureRecognizer(),
+              ),
+            },
           ),
-        ),
-      ],
-    ),
-    bottomNavigationBar: BottomNavBar(selectedIndex: 3),
-  );
-}
-Widget _buildLegendButton() {
-  final categories = TrashInformationModel.getCategories();
-  
-  return PopupMenuButton<int>(
-    color: Colors.white,
-    icon: Container(
-      padding: EdgeInsets.all(8),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        shape: BoxShape.circle,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black12,
-            blurRadius: 4,
-            offset: Offset(0, 2),
-          ),
-        ],
-      ),
-      child: Icon(Icons.help_outline, color: Colors.blue, size: 24),
-    ),
-    itemBuilder: (context) {
-      final menuItems = <PopupMenuEntry<int>>[
-        PopupMenuItem<int>(
-          value: -1,
-          enabled: false,
-          child: Text('Trash Categories', 
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 16,
-              color: Colors.black
-            ),
-          ),
-        ),
-      ];
-      
-      for (var i = 0; i < categories.length; i++) {
-        final category = categories[i];
-        menuItems.add(
-          PopupMenuItem<int>(
-            value: i,
-            child: Row(
+          // Position the legend button above the map
+          Positioned(
+            right: 4,
+            top: 64,
+            child: Column(
               children: [
-                Container(
-                  width: 16,
-                  height: 16,
-                  decoration: BoxDecoration(
-                    color: category.color,
-                    shape: BoxShape.circle,
-                  ),
-                ),
-                SizedBox(width: 4),
-                Icon(categories[i].icon, color: categories[i].color),
-                SizedBox(width: 4),
-                Text(category.name),
+                _buildLegendButton(),
               ],
             ),
           ),
-        );
-        
-        if (i != categories.length - 1) {
+        ],
+      ),
+      bottomNavigationBar: BottomNavBar(selectedIndex: 3),
+    );
+  }
+
+  Widget _buildLegendButton() {
+    final categories = TrashInformationModel.getCategories();
+
+    return PopupMenuButton<int>(
+      onSelected: (int selectedIndex) {
+        final selectedCategory = categories[selectedIndex];
+        moveToNearestTrash(selectedCategory);
+      },
+      color: Colors.white,
+      icon: Container(
+        padding: EdgeInsets.all(8),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          shape: BoxShape.circle,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black12,
+              blurRadius: 4,
+              offset: Offset(0, 2),
+            ),
+          ],
+        ),
+        child: Icon(Icons.help_outline, color: Colors.blue, size: 24),
+      ),
+      itemBuilder: (context) {
+        final menuItems = <PopupMenuEntry<int>>[
+          PopupMenuItem<int>(
+            value: -1,
+            enabled: false,
+            child: Text(
+              'Trash Categories',
+              style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
+                  color: Colors.black),
+            ),
+          ),
+        ];
+
+        for (var i = 0; i < categories.length; i++) {
+          final category = categories[i];
           menuItems.add(
-            PopupMenuDivider(height: 8),
+            PopupMenuItem<int>(
+              value: i,
+              child: Row(
+                children: [
+                  Container(
+                    width: 16,
+                    height: 16,
+                    decoration: BoxDecoration(
+                      color: category.color,
+                      shape: BoxShape.circle,
+                    ),
+                  ),
+                  SizedBox(width: 4),
+                  Icon(categories[i].icon, color: categories[i].color),
+                  SizedBox(width: 4),
+                  Text(category.name),
+                ],
+              ),
+            ),
           );
+
+          if (i != categories.length - 1) {
+            menuItems.add(
+              PopupMenuDivider(height: 8),
+            );
+          }
         }
-      }
-      
-      return menuItems;
-    },
-    offset: Offset(0, 60),
-    shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(12),
-    ),
-    elevation: 4,
-  );
-}
+
+        return menuItems;
+      },
+      offset: Offset(0, 60),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+      ),
+      elevation: 4,
+    );
+  }
 }
