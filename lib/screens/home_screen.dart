@@ -12,22 +12,23 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            // Text(
-            //   "Page $_selectedIndex",
-            //   style: const TextStyle(fontSize: 24),
-            // ),
-            HomeStat(),
-            WelcomeMessage(username: "Krittanon"),
-          ],
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              // HomeStat should be inside the scrollable area
+              const HomeStat(),
+              // WelcomeMessage should also be inside the scrollable area
+              WelcomeMessage(username: "Krittanon"),
+              // Add some padding at the bottom to account for the navigation bar
+              SizedBox(height: MediaQuery.of(context).padding.bottom + 20),
+            ],
+          ),
         ),
       ),
       bottomNavigationBar: BottomNavBar(

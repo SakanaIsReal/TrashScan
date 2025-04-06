@@ -32,21 +32,21 @@ class AboutTeamScreen extends StatelessWidget {
           name: 'Krittanon',
           surname: 'Chonklahan',
           role: 'Ux/UI Designner',
-          imagePath: 'assets/icons/FrontSuki.png',
+          imagePath: 'assets/images/profile_saka.png',
           githubUrl: 'https://github.com/SakanaIsReal',
           linkedinUrl: ''),
       TeamMember(
           name: 'Jutichot',
           surname: 'Phengpan',
           role: 'Ux/UI Designner',
-          imagePath: 'assets/icons/FrontKanz.png',
+          imagePath: 'assets/images/profile_kan.png',
           githubUrl: 'https://github.com/Nicegreanz',
           linkedinUrl: ''),
       TeamMember(
           name: 'Jirayu',
           surname: 'smart',
           role: 'AI Developer',
-          imagePath: 'assets/icons/inter_chicken.png',
+          imagePath: 'assets/images/profile_inter.png',
           githubUrl: 'https://github.com/InterSecure-TheFoundation',
           linkedinUrl: ''),
     ];
@@ -55,29 +55,31 @@ class AboutTeamScreen extends StatelessWidget {
         appBar: CustomAppBar(),
         body: Padding(
           padding: const EdgeInsets.all(15.0),
-          child: Column(
-            children: [
-              Row(
-                children: [
-                  Text(
-                    'Meet our team',
-                    style: TextStyle(
-                      fontSize: 33,
-                      fontWeight: FontWeight.bold,
-                      decoration: TextDecoration.underline,
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                Row(
+                  children: [
+                    Text(
+                      'Meet our team',
+                      style: TextStyle(
+                        fontSize: 33,
+                        fontWeight: FontWeight.bold,
+                        decoration: TextDecoration.underline,
+                      ),
                     ),
-                  ),
-                  const Spacer(),
-                  CustomBackButton(),
-                ],
-              ),
-              // const SizedBox(height: 2),
-              Column(
-                children: teamMember.map((member) {
-                  return DevCard(member: member);
-                }).toList(),
-              )
-            ],
+                    const Spacer(),
+                    CustomBackButton(),
+                  ],
+                ),
+                // const SizedBox(height: 2),
+                Column(
+                  children: teamMember.map((member) {
+                    return DevCard(member: member);
+                  }).toList(),
+                )
+              ],
+            ),
           ),
         ),
         bottomNavigationBar: BottomNavBar(

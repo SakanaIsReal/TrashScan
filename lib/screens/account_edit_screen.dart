@@ -87,7 +87,7 @@ class _AccountEditScreenState extends State<AccountEditScreen> {
       appBar: CustomAppBar(),
       body: Padding(
         padding: const EdgeInsets.only(top: 20.0, left: 20.0, right: 20.0),
-        child: Center(
+        child: SingleChildScrollView(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [

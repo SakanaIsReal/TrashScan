@@ -9,7 +9,7 @@ class DiarySummary extends StatelessWidget {
   const DiarySummary({
     super.key,
     this.fontSize = 16.0,
-    this.divider = '. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .',
+    this.divider = '. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .',
     this.summaryItems = const [ // Mark the list as `const`
     SummaryItem('Plastic', 0),
     SummaryItem('Metal', 0),

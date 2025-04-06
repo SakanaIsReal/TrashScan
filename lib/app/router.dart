@@ -1,4 +1,6 @@
 import 'package:go_router/go_router.dart';
+import 'package:flutter/material.dart';
+
 import 'package:trashscan/screens/about_team_screen.dart';
 import 'package:trashscan/screens/account_edit_screen.dart';
 import 'package:trashscan/screens/account_registration_screen.dart';
@@ -9,28 +11,30 @@ import 'package:trashscan/screens/education_screen.dart';
 import 'package:trashscan/screens/map_screen.dart';
 import 'package:trashscan/screens/scan_screen.dart';
 import 'package:trashscan/screens/setting_screen.dart';
-import '../screens/home_screen.dart';
+import 'package:trashscan/screens/home_screen.dart';
 import 'package:trashscan/screens/Notification_setting_screen.dart';
 import 'package:trashscan/screens/trashDict_screen.dart';
 
-// import '../screens/second_screen.dart';
-// import '../screens/profile_screen.dart';
-
-// Define GoRouter instance
 final GoRouter appRouter = GoRouter(
   initialLocation: "/",
   routes: [
     GoRoute(
       path: '/',
-      builder: (context, state) => HomeScreen(),
+      pageBuilder: (context, state) => NoTransitionPage(
+        child: HomeScreen(),
+      ),
     ),
     GoRoute(
       path: '/diary',
-      builder: (context, state) => DiaryScreen(),
+      pageBuilder: (context, state) => NoTransitionPage(
+        child: DiaryScreen(),
+      ),
     ),
     GoRoute(
       path: '/scan',
-      builder: (context, state) => ScanScreen(),
+      pageBuilder: (context, state) => NoTransitionPage(
+        child: ScanScreen(),
+      ),
     ),
     GoRoute(
       path: '/map',
@@ -41,43 +45,61 @@ final GoRouter appRouter = GoRouter(
     ),
     GoRoute(
       path: '/settings',
-      builder: (context, state) => SettingScreen(),
+      pageBuilder: (context, state) => NoTransitionPage(
+        child: SettingScreen(),
+      ),
     ),
     GoRoute(
       path: '/about',
-      builder: (context, state) => AboutTeamScreen(),
+      pageBuilder: (context, state) => NoTransitionPage(
+        child: AboutTeamScreen(),
+      ),
     ),
     GoRoute(
       path: "/NotificationSetting",
-      builder: (context, state) => NotificationSettingsScreen(),
+      pageBuilder: (context, state) => NoTransitionPage(
+        child: NotificationSettingsScreen(),
+      ),
     ),
     GoRoute(
       path: "/trashDict",
-      builder: (context, state) => TrashdictScreen(),
+      pageBuilder: (context, state) => NoTransitionPage(
+        child: TrashdictScreen(),
+      ),
     ),
     GoRoute(
       path: '/education/:id',
       name: 'education',
-      builder: (context, state) {
+      pageBuilder: (context, state) {
         final id = int.parse(state.pathParameters['id']!);
-        return EducationScreen(id: id);
+        return NoTransitionPage(
+          child: EducationScreen(id: id),
+        );
       },
     ),
     GoRoute(
       path: "/account",
-      builder: (context, state) => AccountScreen(),
+      pageBuilder: (context, state) => NoTransitionPage(
+        child: AccountScreen(),
+      ),
     ),
     GoRoute(
       path: "/advancement",
-      builder: (context, state) => AdvancementScreen(),
+      pageBuilder: (context, state) => NoTransitionPage(
+        child: AdvancementScreen(),
+      ),
     ),
     GoRoute(
       path: "/account_edit",
-      builder: (context, state) => AccountEditScreen(),
+      pageBuilder: (context, state) => NoTransitionPage(
+        child: AccountEditScreen(),
+      ),
     ),
     GoRoute(
       path: "/account_registration",
-      builder: (context, state) => AccountRegistrationScreen(),
+      pageBuilder: (context, state) => NoTransitionPage(
+        child: AccountRegistrationScreen(),
+      ),
     ),
   ],
 );

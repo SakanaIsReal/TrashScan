@@ -22,15 +22,27 @@ class DevCard extends StatelessWidget {
         child: Row(
           children: [
             Container(
-              color: Colors.white,
               width: 140,
               height: 140,
-              child: Image.asset(
-                member.imagePath,
-                fit: BoxFit.contain,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(20), // Round corners
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.1),
+                    blurRadius: 4,
+                    offset: const Offset(0, 0), // Shadow offset
+                  ),
+                ],
+              ),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(20), // Match container radius
+                child: Image.asset(
+                  member.imagePath,
+                  fit: BoxFit.cover, // Changed to cover to fill the square
+                ),
               ),
             ),
-            const SizedBox(width: 40.0),
+            const SizedBox(width: 20.0),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
