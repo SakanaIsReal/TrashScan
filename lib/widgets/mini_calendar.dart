@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+import 'package:intl/intl.dart';
 
-class MiniCalendar extends StatefulWidget {
-  const MiniCalendar({super.key});
+class MiniCalendar extends StatelessWidget {
+  final DateTime date;
 
-  @override
-  State<MiniCalendar> createState() => _MiniCalendarState();
-}
+  const MiniCalendar({super.key, required this.date});
 
-class _MiniCalendarState extends State<MiniCalendar> {
   @override
   Widget build(BuildContext context) {
+    final String weekday = DateFormat('EEEE').format(date); 
+    final String day = DateFormat('d').format(date);     
+
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
@@ -30,11 +30,11 @@ class _MiniCalendarState extends State<MiniCalendar> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            _buildDateBadge(),
+            _buildDateBadge(weekday),
             const SizedBox(height: 5),
-            const Text(
-              "27", // Example day
-              style: TextStyle(fontSize: 36, fontWeight: FontWeight.bold),
+            Text(
+              day,
+              style: const TextStyle(fontSize: 36, fontWeight: FontWeight.bold),
             ),
           ],
         ),
@@ -42,16 +42,16 @@ class _MiniCalendarState extends State<MiniCalendar> {
     );
   }
 
-  Widget _buildDateBadge() {
+  Widget _buildDateBadge(String weekday) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
       decoration: BoxDecoration(
         color: Colors.green[700],
         borderRadius: BorderRadius.circular(8),
       ),
-      child: const Text(
-        "Monday",
-        style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+      child: Text(
+        weekday,
+        style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
       ),
     );
   }
