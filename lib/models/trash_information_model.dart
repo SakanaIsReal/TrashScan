@@ -418,8 +418,8 @@ class TrashInformationModel {
       ),
       imagePath: 'assets/images/metal.jpg',
       total: 50,
-      color: Color(0xffA0A0A0),
-      icon: Icons.kitchen, // หรือเลือก icon ที่เกี่ยวกับโลหะ
+      color: Color(0xff505050),
+      icon: Icons.fire_extinguisher, // หรือเลือก icon ที่เกี่ยวกับโลหะ
       markerPath: 'assets/images/marker_metal.png',
       trashLoc: [LatLng(13.793900, 100.319999), LatLng(13.794000, 100.320200)],
     ));
