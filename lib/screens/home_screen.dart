@@ -3,6 +3,7 @@ import '../widgets/custom_app_bar.dart';
 import '../widgets/bottom_nav_bar.dart';
 import '../widgets/welcome_message.dart';
 import '../widgets/home_stat.dart';
+import '../functions/user_data.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -12,6 +13,21 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  String _username = '';
+  void initState() {
+    super.initState();
+    _loadUserData();
+  }
+
+  Future<void> _loadUserData() async {
+    final user = await UserStorage.loadUserData();
+    if (user != null) {
+      setState(() {
+        _username = user.username;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,7 +40,7 @@ class _HomeScreenState extends State<HomeScreen> {
               // HomeStat should be inside the scrollable area
               const HomeStat(),
               // WelcomeMessage should also be inside the scrollable area
-              WelcomeMessage(username: "Krittanon"),
+              WelcomeMessage(fallbackUsername: _username.isNotEmpty ? _username : "User"),
               // Add some padding at the bottom to account for the navigation bar
               SizedBox(height: MediaQuery.of(context).padding.bottom + 20),
             ],
