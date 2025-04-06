@@ -4,7 +4,7 @@ import 'bottom_nav_bar.dart';
 import '../models/trash_information_model.dart';
 import '../widgets/pcs_total_badge.dart';
 import 'package:go_router/go_router.dart';
-import '../functions/dirary_storage.dart';
+import '../functions/diary_storage.dart';
 import 'package:flutter/services.dart';
 
 enum InfoSheetType { loading, information, error }
