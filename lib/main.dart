@@ -99,6 +99,9 @@ Future<bool> _requestNotificationPermissions() async {
 
 Future<void> scheduleDailyNotification() async {
   try {
+    final notificationsEnabled = await _areNotificationsEnabled();
+    if (!notificationsEnabled) return;
+
     final scheduledTime = _nextInstanceOf8AM();
     await flutterLocalNotificationsPlugin.zonedSchedule(
       0,
@@ -125,9 +128,14 @@ Future<void> scheduleDailyNotification() async {
 tz.TZDateTime _nextInstanceOf8AM() {
   final now = tz.TZDateTime.now(tz.local);
   tz.TZDateTime scheduledDate =
-      tz.TZDateTime(tz.local, now.year, now.month, now.day, 8, 0);
+      tz.TZDateTime(tz.local, now.year, now.month, now.day, 20, 58);
   if (scheduledDate.isBefore(now)) {
     scheduledDate = scheduledDate.add(const Duration(days: 1));
   }
   return scheduledDate;
+}
+
+Future<bool> _areNotificationsEnabled() async {
+  final prefs = await SharedPreferences.getInstance();
+  return prefs.getBool('notifications_enabled') ?? true;
 }

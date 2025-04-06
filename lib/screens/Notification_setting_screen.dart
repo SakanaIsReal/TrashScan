@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:trashscan/main.dart';
 import 'package:trashscan/widgets/custom_app_bar.dart';
 import 'package:trashscan/widgets/bottom_nav_bar.dart';
 import 'package:trashscan/widgets/custom_back_button.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 class NotificationSettingsScreen extends StatefulWidget {
   const NotificationSettingsScreen({super.key});
@@ -14,6 +17,41 @@ class NotificationSettingsScreen extends StatefulWidget {
 class _NotificationSettingsScreenState
     extends State<NotificationSettingsScreen> {
   bool isNotificationEnabled = true;
+  final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+      FlutterLocalNotificationsPlugin();
+
+  @override
+  void initState() {
+    super.initState();
+    _loadNotificationPreference();
+  }
+
+  Future<void> _loadNotificationPreference() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      isNotificationEnabled = prefs.getBool('notifications_enabled') ?? true;
+    });
+  }
+
+  Future<void> _saveNotificationPreference(bool value) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('notifications_enabled', value);
+  }
+
+  Future<void> _toggleNotifications(bool value) async {
+    setState(() {
+      isNotificationEnabled = value;
+    });
+    await _saveNotificationPreference(value);
+    
+    if (value) {
+      // If enabling notifications, schedule them
+      await scheduleDailyNotification();
+    } else {
+      // If disabling notifications, cancel all scheduled ones
+      await flutterLocalNotificationsPlugin.cancelAll();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -89,11 +127,7 @@ class _NotificationSettingsScreenState
                           activeTrackColor: Colors.green[200],
                           inactiveThumbColor: Colors.white,
                           inactiveTrackColor: Colors.grey[300],
-                          onChanged: (value) {
-                            setState(() {
-                              isNotificationEnabled = value;
-                            });
-                          },
+                          onChanged: _toggleNotifications,
                         ),
                       ),
                     ),
