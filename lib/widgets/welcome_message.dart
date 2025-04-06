@@ -27,7 +27,8 @@ class _WelcomeMessageState extends State<WelcomeMessage> {
   Future<void> _loadUserInfoAndAdvancement() async {
     final user = await UserStorage.loadUserData();
     final totalPoints = await DiaryStorage.getTotalPoints();
-    final advancements = AdvancementModel.getAdvancementsWithProgress(totalPoints);
+    final advancements =
+        AdvancementModel.getAdvancementsWithProgress(totalPoints);
 
     AdvancementModel? highestDone = advancements
         .where((a) => totalPoints >= a.targetScan)
@@ -62,16 +63,30 @@ class _WelcomeMessageState extends State<WelcomeMessage> {
                   height: 0.1,
                 ),
               ),
-              Text(
-                _username,
-                style: const TextStyle(fontSize: 68, fontWeight: FontWeight.bold, height: 1.3),
+              // Text(
+              //   _username,
+              //   style: const TextStyle(fontSize: 44, fontWeight: FontWeight.bold, height: 1.3),
+              // ),
+              Container(
+                // width: 200, // or any width
+                child: FittedBox(
+                  fit: BoxFit.scaleDown,
+                  child: Text(
+                    _username,
+                    style: TextStyle(
+                        fontSize: 66,
+                        fontWeight: FontWeight.bold,
+                        height: 1.3), // original size, will be scaled
+                  ),
+                ),
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   if (_highestAchievement != null)
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 12, vertical: 4),
                       decoration: BoxDecoration(
                         color: _highestAchievement!.color,
                         borderRadius: BorderRadius.circular(20),
@@ -91,7 +106,8 @@ class _WelcomeMessageState extends State<WelcomeMessage> {
                             _highestAchievement!.svgPath,
                             width: 18,
                             height: 18,
-                            colorFilter: const ColorFilter.mode(Colors.white, BlendMode.srcIn),
+                            colorFilter: const ColorFilter.mode(
+                                Colors.white, BlendMode.srcIn),
                           ),
                         ],
                       ),
