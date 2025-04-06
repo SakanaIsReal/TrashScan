@@ -84,6 +84,26 @@ class InfoSheet extends StatelessWidget {
         ),
         const SizedBox(height: 16),
         trashCategory.description,
+        SizedBox(height: 4),
+        GestureDetector(
+          onTap: () {
+            context.push('/education/${trashCategory.id}');
+          },
+          child: Container(
+            child: Container(
+              decoration: BoxDecoration(
+                  color: Colors.blue, borderRadius: BorderRadius.circular(20)),
+              child: Padding(
+                padding: const EdgeInsets.only(left: 10, right: 10),
+                child: Text(
+                  'Learn more',
+                  style: TextStyle(
+                      color: Colors.white, fontWeight: FontWeight.bold),
+                ),
+              ),
+            ),
+          ),
+        ),
         const SizedBox(height: 24),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,

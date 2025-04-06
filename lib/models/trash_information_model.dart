@@ -43,10 +43,7 @@ class TrashInformationModel {
           text: 'Plastics can be recycled into new products. ',
           style: TextStyle(color: Colors.black),
           children: [
-            TextSpan(
-              text: 'Learn more',
-              style: TextStyle(color: Colors.blue),
-            ),
+            
           ],
         ),
       ),
@@ -103,10 +100,7 @@ class TrashInformationModel {
           text: 'Paper products can be recycled 5-7 times. ',
           style: TextStyle(color: Colors.black),
           children: [
-            TextSpan(
-              text: 'Learn more',
-              style: TextStyle(color: Colors.blue),
-            ),
+            
           ],
         ),
       ),
@@ -158,10 +152,7 @@ class TrashInformationModel {
           text: 'E-waste requires special recycling. ',
           style: TextStyle(color: Colors.black),
           children: [
-            TextSpan(
-              text: 'Learn more',
-              style: TextStyle(color: Colors.blue),
-            ),
+            
           ],
         ),
       ),
@@ -211,10 +202,7 @@ class TrashInformationModel {
           text: 'Glass can be recycled endlessly. ',
           style: TextStyle(color: Colors.black),
           children: [
-            TextSpan(
-              text: 'Learn more',
-              style: TextStyle(color: Colors.blue),
-            ),
+            
           ],
         ),
       ),
@@ -265,10 +253,7 @@ class TrashInformationModel {
           text: 'Organic waste can be composted. ',
           style: TextStyle(color: Colors.black),
           children: [
-            TextSpan(
-              text: 'Learn more',
-              style: TextStyle(color: Colors.blue),
-            ),
+            
           ],
         ),
       ),
@@ -325,10 +310,7 @@ class TrashInformationModel {
           text: 'Handle hazardous waste with care. ',
           style: TextStyle(color: Colors.black),
           children: [
-            TextSpan(
-              text: 'Learn more',
-              style: TextStyle(color: Colors.blue),
-            ),
+            
           ],
         ),
       ),
@@ -381,10 +363,7 @@ class TrashInformationModel {
           text: 'Metal items like cans can be recycled. ',
           style: TextStyle(color: Colors.black),
           children: [
-            TextSpan(
-              text: 'Learn more',
-              style: TextStyle(color: Colors.blue),
-            ),
+            
           ],
         ),
       ),

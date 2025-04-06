@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -203,6 +204,27 @@ class _MapScreenState extends State<MapScreen> {
               Text("Total: ${category.total}"),
               SizedBox(height: 10),
               category.description,
+              SizedBox(height: 4),
+              GestureDetector(
+                onTap: () {
+                  context.push('/education/${category.id}');
+                },
+                child: Container(
+                  child: Container(
+                    decoration: BoxDecoration(
+                        color: Colors.blue,
+                        borderRadius: BorderRadius.circular(20)),
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 10, right: 10),
+                      child: Text(
+                        'Learn more',
+                        style: TextStyle(
+                            color: Colors.white, fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
               SizedBox(height: 10),
             ],
           ),
