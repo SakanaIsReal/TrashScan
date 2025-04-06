@@ -2,15 +2,17 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:trashscan/widgets/custom_back_button.dart';
+import 'package:path_provider/path_provider.dart';
 import '../widgets/custom_app_bar.dart';
-import '../widgets/bottom_nav_bar.dart';
+import '../functions/user_data.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AccountRegistrationScreen extends StatefulWidget {
   const AccountRegistrationScreen({super.key});
 
   @override
-  _AccountRegistrationScreenState createState() => _AccountRegistrationScreenState();
+  _AccountRegistrationScreenState createState() =>
+      _AccountRegistrationScreenState();
 }
 
 class _AccountRegistrationScreenState extends State<AccountRegistrationScreen> {
@@ -20,23 +22,74 @@ class _AccountRegistrationScreenState extends State<AccountRegistrationScreen> {
   File? _profileImage;
   final ImagePicker _picker = ImagePicker();
 
+  String? _usernameErrorText;
+  String? _profileImageErrorText;
+
   Future<void> _pickImage() async {
     try {
       final XFile? pickedFile = await _picker.pickImage(
         source: ImageSource.gallery,
         maxWidth: 500,
         maxHeight: 500,
-        imageQuality: 90);
+        imageQuality: 90,
+      );
 
       if (pickedFile != null) {
+        final directory = await getApplicationDocumentsDirectory();
+        final profileDir = Directory('${directory.path}/profile');
+        if (!await profileDir.exists()) {
+          await profileDir.create(recursive: true);
+        }
+
+        final fileName = 'profile_${DateTime.now().millisecondsSinceEpoch}.jpg';
+        final savedImage =
+            await File(pickedFile.path).copy('${profileDir.path}/$fileName');
+
         setState(() {
-          _profileImage = File(pickedFile.path);
+          _profileImage = savedImage;
+          _profileImageErrorText = null;
         });
       }
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Failed to pick image: ${e.toString()}')),
-      );
+      setState(() {
+        _profileImageErrorText = "Failed to pick image: ${e.toString()}";
+      });
+    }
+  }
+
+  Future<void> _saveUserData() async {
+    final newUsername = _usernameController.text.trim();
+    final isTooLong = newUsername.length > 10;
+    final isNotEnglish = !RegExp(r'^[a-zA-Z0-9_]+$').hasMatch(newUsername);
+
+    setState(() {
+      _usernameErrorText = null;
+      _profileImageErrorText = null;
+    });
+
+    if (isTooLong || isNotEnglish) {
+      setState(() {
+        _usernameErrorText = isTooLong && isNotEnglish
+            ? "Username can only contain English letters and must not exceed 10 characters."
+            : isTooLong
+                ? "Username must not exceed 10 characters."
+                : "Username can only contain English letters.";
+      });
+      return;
+    }
+
+    final userData = UserData(
+      username: newUsername,
+      profileImagePath: _profileImage?.path,
+      registrationDate: DateTime.now(),
+    );
+
+    await UserStorage.saveUserData(userData);
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('isRegistered', true);
+    await Future.delayed(const Duration(seconds: 1));
+    if (context.mounted) {
+      context.push('/');
     }
   }
 
@@ -45,6 +98,20 @@ class _AccountRegistrationScreenState extends State<AccountRegistrationScreen> {
     _usernameController.dispose();
     _usernameFocusNode.dispose();
     super.dispose();
+  }
+
+  Future<void> _skipAndSaveDefault() async {
+    final defaultUser = UserData(
+      username: "User",
+      profileImagePath: null,
+      registrationDate: DateTime.now(),
+    );
+    await UserStorage.saveUserData(defaultUser);
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('isRegistered', true);
+    if (context.mounted) {
+      context.push('/');
+    }
   }
 
   @override
@@ -60,17 +127,11 @@ class _AccountRegistrationScreenState extends State<AccountRegistrationScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  const Icon(
-                    Icons.account_circle,
-                    size: 40,
-                  ),
+                  const Icon(Icons.account_circle, size: 40),
                   const SizedBox(width: 4),
                   const Text(
-                    'Let’s Get Started',
-                    style: TextStyle(
-                      fontSize: 33,
-                      fontWeight: FontWeight.bold,
-                    ),
+                    'Let\'s Get Started',
+                    style: TextStyle(fontSize: 33, fontWeight: FontWeight.bold),
                   ),
                   const Spacer(),
                 ],
@@ -85,10 +146,7 @@ class _AccountRegistrationScreenState extends State<AccountRegistrationScreen> {
                       height: 180,
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
-                        border: Border.all(
-                          color: Colors.white,
-                          width: 5.0,
-                        ),
+                        border: Border.all(color: Colors.white, width: 5.0),
                         boxShadow: [
                           BoxShadow(
                             color: Colors.black.withOpacity(0.2),
@@ -100,12 +158,11 @@ class _AccountRegistrationScreenState extends State<AccountRegistrationScreen> {
                         image: _profileImage != null
                             ? DecorationImage(
                                 fit: BoxFit.cover,
-                                image: FileImage(_profileImage!),
-                              )
+                                image: FileImage(_profileImage!))
                             : const DecorationImage(
                                 fit: BoxFit.cover,
                                 image: AssetImage(
-                                    'assets/images/profile_placeholder.png'),
+                                    'assets/profile/profile_placeholder.png'),
                               ),
                       ),
                     ),
@@ -120,166 +177,64 @@ class _AccountRegistrationScreenState extends State<AccountRegistrationScreen> {
                           border: Border.all(width: 6, color: Colors.white),
                           color: Theme.of(context).primaryColor,
                         ),
-                        child: const Icon(
-                          Icons.edit,
-                          color: Colors.white,
-                          size: 30,
-                        ),
+                        child: const Icon(Icons.edit,
+                            color: Colors.white, size: 30),
                       ),
                     )
                   ],
                 ),
               ),
-              const SizedBox(height: 42),
-              Container(
-                height: 70,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(26),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.1),
-                      spreadRadius: 2,
-                      blurRadius: 5,
-                      offset: Offset(0, 0),
-                    )
-                  ],
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      const Icon(Icons.person, size: 50),
-                      const SizedBox(width: 8),
-                      Expanded(
-                        child: SizedBox(
-                          height: 40,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const Text("Username",
-                                  style: TextStyle(fontSize: 12)),
-                              Expanded(
-                                child: TextField(
-                                  controller: _usernameController,
-                                  focusNode: _usernameFocusNode,
-                                  style: const TextStyle(fontSize: 18),
-                                  decoration: InputDecoration(
-                                    enabledBorder: const UnderlineInputBorder(
-                                      borderSide:
-                                          BorderSide(color: Colors.grey),
-                                    ),
-                                    focusedBorder: UnderlineInputBorder(
-                                      borderSide: BorderSide(
-                                        color: Theme.of(context).primaryColor,
-                                      ),
-                                    ),
-                                    contentPadding: EdgeInsets.zero,
-                                    isDense: true,
-                                    border: InputBorder.none,
-                                    hintText: 'Enter username',
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      IconButton(
-                        icon: Container(
-                          width: 20,
-                          height: 20,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: Colors.grey[300],
-                          ),
-                          child: const Icon(
-                            Icons.close,
-                            size: 16,
-                            color: Colors.black,
-                          ),
-                        ),
-                        onPressed: () {
-                          _usernameController.clear();
-                          setState(() {});
-                        },
-                      )
-                    ],
+              if (_profileImageErrorText != null)
+                Padding(
+                  padding: const EdgeInsets.only(top: 8.0),
+                  child: Text(
+                    _profileImageErrorText!,
+                    style: TextStyle(
+                        color: Colors.red, fontWeight: FontWeight.w500),
                   ),
+                ),
+              const SizedBox(height: 42),
+              TextField(
+                controller: _usernameController,
+                focusNode: _usernameFocusNode,
+                style: const TextStyle(fontSize: 18),
+                decoration: InputDecoration(
+                  labelText: "Username",
+                  hintText: "Enter username",
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(16)),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(16),
+                    borderSide: BorderSide(
+                      color:
+                          _usernameErrorText != null ? Colors.red : Colors.grey,
+                    ),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(16),
+                    borderSide: BorderSide(
+                      color: _usernameErrorText != null
+                          ? Colors.red
+                          : Theme.of(context).primaryColor,
+                    ),
+                  ),
+                  errorText: _usernameErrorText,
+                  contentPadding:
+                      const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
                 ),
               ),
               const SizedBox(height: 20),
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  GestureDetector(
-                    onTap: () {
-                      _usernameController.text = "";
-                      setState(() {
-                        _profileImage = null;
-                      });
-                    },
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(14),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.only(
-                            left: 14.0, right: 14, top: 6, bottom: 6),
-                        child: Text(
-                          'Skip',
-                          style: TextStyle(
-                              color: Theme.of(context).primaryColor,
-                              decoration: TextDecoration.underline,
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                    ),
+                  TextButton(
+                    onPressed: _skipAndSaveDefault,
+                    child: const Text("Skip"),
                   ),
                   const SizedBox(width: 8),
-                  GestureDetector(
-                    onTap: () {
-                      final newUsername = _usernameController.text;
-                      // TODO: Implement save functionality including the image
-                      // You would typically upload the image to a server here
-                      if (_profileImage != null) {
-                        // Handle the image file
-                      }
-                    },
-                    child: GestureDetector(
-                      onTap: () => context.go('/'),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                              width: 2, color: Theme.of(context).primaryColor),
-                          color: Theme.of(context).primaryColor,
-                          borderRadius: BorderRadius.circular(14),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withOpacity(0.1),
-                              spreadRadius: 1,
-                              blurRadius: 5,
-                              offset: Offset(0, 0),
-                            )
-                          ],
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.only(
-                              left: 16.0, right: 16, top: 6, bottom: 6),
-                          child: const Text(
-                            'Save',
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                      ),
-                    ),
+                  ElevatedButton(
+                    onPressed: _saveUserData,
+                    child: const Text("Save"),
                   ),
                 ],
               )
