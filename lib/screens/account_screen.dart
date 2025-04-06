@@ -4,9 +4,10 @@ import 'package:flutter_svg/flutter_svg.dart';
 import '../widgets/custom_app_bar.dart';
 import '../widgets/bottom_nav_bar.dart';
 import '../models/advancement_model.dart';
+import 'package:intl/intl.dart';
 import 'dart:io';
-import 'package:path_provider/path_provider.dart';
 import '../functions/user_data.dart';
+import '../functions/diary_storage.dart';
 
 class AccountScreen extends StatefulWidget {
   const AccountScreen({super.key});
@@ -17,12 +18,18 @@ class AccountScreen extends StatefulWidget {
 
 class _AccountScreenState extends State<AccountScreen> {
   String _username = '';
+  DateTime? _registrationDate;
   File? _profileImageFile;
-
+  AdvancementModel? _currentAdvancement;
+  int _streakCount = 0;
+  int _totalPoints = 0;
+  @override
   @override
   void initState() {
     super.initState();
     _loadUserData();
+    _loadCurrentAdvancement();
+    _loadStreak();
   }
 
   Future<void> _loadUserData() async {
@@ -30,6 +37,7 @@ class _AccountScreenState extends State<AccountScreen> {
     if (savedData != null) {
       setState(() {
         _username = savedData.username;
+        _registrationDate = savedData.registrationDate;
         if (savedData.profileImagePath != null) {
           final file = File(savedData.profileImagePath!);
           if (file.existsSync()) {
@@ -40,21 +48,24 @@ class _AccountScreenState extends State<AccountScreen> {
     }
   }
 
-  AdvancementModel? get currentAdvancement {
-    final allAdvancements = AdvancementModel.getAdvancements();
-    return allAdvancements.firstWhere(
-      (adv) => adv.progress < adv.targetScan,
-      orElse: () => allAdvancements.last,
-    );
+  Future<void> _loadStreak() async {
+    final streak = await DiaryStorage.getStreakCount();
+    setState(() {
+      _streakCount = streak;
+    });
+  }
+
+  Future<void> _loadCurrentAdvancement() async {
+    final advancement = await AdvancementModel.getCurrentAdvancement();
+    final points = await DiaryStorage.getTotalPoints();
+    setState(() {
+      _currentAdvancement = advancement;
+      _totalPoints = points;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    final advancement = currentAdvancement;
-    final progressPercentage = advancement != null
-        ? (advancement.progress / advancement.targetScan).clamp(0.0, 1.0)
-        : 0.0;
-
     return Scaffold(
       appBar: CustomAppBar(),
       body: SingleChildScrollView(
@@ -81,8 +92,8 @@ class _AccountScreenState extends State<AccountScreen> {
                       color: Theme.of(context).primaryColor,
                     ),
                     child: Padding(
-                      padding:
-                          const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 16, vertical: 8),
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: const [
@@ -118,7 +129,8 @@ class _AccountScreenState extends State<AccountScreen> {
                     fit: BoxFit.cover,
                     image: _profileImageFile != null
                         ? FileImage(_profileImageFile!)
-                        : const AssetImage('assets/images/profile_placeholder.png')
+                        : const AssetImage(
+                                'assets/profile/profile_placeholder.png')
                             as ImageProvider,
                   ),
                 ),
@@ -142,28 +154,32 @@ class _AccountScreenState extends State<AccountScreen> {
                         offset: Offset(0, 0),
                       )
                     ]),
-                child: const Padding(
+                child: Padding(
                   padding:
                       EdgeInsets.symmetric(horizontal: 18.0, vertical: 8.0),
                   child: Text(
-                    "Created 22/03/25",
-                    style:
-                        TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                    _registrationDate != null
+                        ? "Created ${DateFormat('dd/MM/yyyy').format(_registrationDate!)}"
+                        : "Created --/--/--",
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
               ),
               const SizedBox(height: 20),
               Row(
                 children: [
-                  _buildStatBox("161", "Pcs.", "Total"),
+                  _buildStatBox("$_totalPoints", "pcs.", "Total"),
                   const SizedBox(width: 20),
-                  _buildStatBox("25", "Day", "Streak"),
+                  _buildStatBox("$_streakCount", "day", "Streak"),
                 ],
               ),
               const SizedBox(height: 20),
               GestureDetector(
                 onTap: () => context.push('/advancement'),
-                child: _buildAdvancementBox(advancement, progressPercentage),
+                child: _buildAdvancementBox(_currentAdvancement),
               ),
               const SizedBox(height: 20),
             ],
@@ -195,8 +211,7 @@ class _AccountScreenState extends State<AccountScreen> {
           children: [
             Text(
               number,
-              style:
-                  const TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
+              style: const TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
             ),
             const SizedBox(width: 5),
             Column(
@@ -206,16 +221,12 @@ class _AccountScreenState extends State<AccountScreen> {
                 Text(
                   labelTop,
                   style: const TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.bold,
-                      height: 1.3),
+                      fontSize: 14, fontWeight: FontWeight.bold, height: 1.3),
                 ),
                 Text(
                   labelBottom,
                   style: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      height: 1),
+                      fontSize: 16, fontWeight: FontWeight.bold, height: 1),
                 ),
               ],
             )
@@ -225,8 +236,11 @@ class _AccountScreenState extends State<AccountScreen> {
     );
   }
 
-  Widget _buildAdvancementBox(
-      AdvancementModel? advancement, double progressPercentage) {
+  Widget _buildAdvancementBox(AdvancementModel? advancement) {
+    final progress = advancement?.progress ?? 0;
+    final target = advancement?.targetScan ?? 1;
+    final progressPercentage = (progress / target).clamp(0.0, 1.0);
+
     return Container(
       height: 120,
       decoration: BoxDecoration(
@@ -237,7 +251,6 @@ class _AccountScreenState extends State<AccountScreen> {
             color: Colors.black.withOpacity(0.1),
             spreadRadius: 2,
             blurRadius: 5,
-            offset: Offset(0, 0),
           )
         ],
       ),
@@ -254,13 +267,10 @@ class _AccountScreenState extends State<AccountScreen> {
               ),
               child: Center(
                 child: advancement != null
-                    ? SvgPicture.asset(
-                        advancement.svgPath,
-                        width: 50,
-                        height: 50,
-                      )
-                    : const Icon(Icons.help_outline,
-                        size: 40, color: Colors.grey),
+                    ? SvgPicture.asset(advancement.svgPath,
+                        width: 50, height: 50)
+                    : const Icon(Icons.check_circle_outline,
+                        size: 40, color: Colors.white),
               ),
             ),
             const SizedBox(width: 16),
@@ -270,7 +280,7 @@ class _AccountScreenState extends State<AccountScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    advancement?.title ?? 'No current goal',
+                    advancement?.title ?? "All Achievements Complete!",
                     style: const TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
@@ -290,12 +300,9 @@ class _AccountScreenState extends State<AccountScreen> {
                   const SizedBox(height: 4),
                   Text(
                     advancement != null
-                        ? '${advancement.progress}/${advancement.targetScan} scans'
-                        : 'Set a new goal',
-                    style: const TextStyle(
-                      fontSize: 14,
-                      color: Colors.white,
-                    ),
+                        ? '$progress / $target scans'
+                        : 'You’ve completed all levels!',
+                    style: const TextStyle(fontSize: 14, color: Colors.white),
                   ),
                 ],
               ),
