@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:trashscan/widgets/custom_back_button.dart';
 import '../widgets/custom_app_bar.dart';
 import '../widgets/bottom_nav_bar.dart';
@@ -32,14 +33,12 @@ class _EducationScreenState extends State<EducationScreen> {
     return Scaffold(
       appBar: CustomAppBar(),
       body: SingleChildScrollView(
-        // Moved SingleChildScrollView to be the root scrolling widget
         child: Center(
           child: Padding(
             padding: const EdgeInsets.all(20.0),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment
-                  .start, // Changed to start for better alignment
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -98,17 +97,14 @@ class _EducationScreenState extends State<EducationScreen> {
                 const SizedBox(height: 36),
                 GestureDetector(
                   onTap: () {
-                    // Handle button press
-                    print('Button pressed!');
+                    context.push('/map', extra: widget.id);
                   },
                   child: Container(
                     padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
                     decoration: BoxDecoration(
-                      color: Theme.of(context).primaryColor, // Background color
-                      borderRadius:
-                          BorderRadius.circular(20), // Rounded corners
+                      color: Theme.of(context).primaryColor,
+                      borderRadius: BorderRadius.circular(20),
                       boxShadow: [
-                        // Optional shadow
                         BoxShadow(
                           color: Colors.black.withOpacity(0.1),
                           blurRadius: 6,
