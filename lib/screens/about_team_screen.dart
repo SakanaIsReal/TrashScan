@@ -34,21 +34,21 @@ class AboutTeamScreen extends StatelessWidget {
           role: 'Ux/UI Designner',
           imagePath: 'assets/images/profile_saka.png',
           githubUrl: 'https://github.com/SakanaIsReal',
-          linkedinUrl: ''),
+          linkedinUrl: 'https://www.linkedin.com/in/krittanon-chongklahan-67b5b9350/'),
       TeamMember(
           name: 'Jutichot',
           surname: 'Phengpan',
           role: 'Ux/UI Designner',
           imagePath: 'assets/images/profile_kan.png',
           githubUrl: 'https://github.com/Nicegreanz',
-          linkedinUrl: ''),
+          linkedinUrl: 'https://www.linkedin.com/in/jutichot-phengpan-508a62358/'),
       TeamMember(
           name: 'Jirayu',
-          surname: 'smart',
+          surname: 'Saisawat',
           role: 'AI Developer',
           imagePath: 'assets/images/profile_inter.png',
           githubUrl: 'https://github.com/InterSecure-TheFoundation',
-          linkedinUrl: ''),
+          linkedinUrl: 'https://www.linkedin.com/in/jirayu-s-911715353/'),
     ];
 
     return Scaffold(
