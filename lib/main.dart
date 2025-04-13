@@ -128,7 +128,7 @@ Future<void> scheduleDailyNotification() async {
 tz.TZDateTime _nextInstanceOf8AM() {
   final now = tz.TZDateTime.now(tz.local);
   tz.TZDateTime scheduledDate =
-      tz.TZDateTime(tz.local, now.year, now.month, now.day, 20, 58);
+      tz.TZDateTime(tz.local, now.year, now.month, now.day, 8, 0);
   if (scheduledDate.isBefore(now)) {
     scheduledDate = scheduledDate.add(const Duration(days: 1));
   }
