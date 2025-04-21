@@ -88,7 +88,7 @@ class TrashInformationModel {
       color: Color(0xff76CAFF),
       icon: Icons.local_drink,
       markerPath: 'assets/images/marker_plastic.png',
-      trashLoc: [LatLng(13.792141, 100.319698), LatLng(13.792003, 100.319754)],
+      trashLoc: [LatLng(13.792141, 100.319698), LatLng(13.792003, 100.319754), LatLng(16.812177081501815, 100.32020415352586)],
     ));
 
     categories.add(TrashInformationModel(
@@ -298,7 +298,7 @@ class TrashInformationModel {
       color: Color(0xffF3833D),
       icon: Icons.compost,
       markerPath: 'assets/images/marker_organic.png',
-      trashLoc: [LatLng(13.793521, 100.319318), LatLng(13.793644, 100.318778)],
+      trashLoc: [LatLng(13.793521, 100.319318), LatLng(13.793644, 100.318778), LatLng(16.812228068148475, 100.32021542452198)],
     ));
 
     categories.add(TrashInformationModel(
