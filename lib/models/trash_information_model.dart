@@ -37,7 +37,7 @@ class TrashInformationModel {
     categories.add(TrashInformationModel(
       id: 1,
       name: 'Plastics',
-      tags: ['Recyclable', 'PET', 'HDPE'],
+      tags: ['Recycle', 'General', 'Dirty Food/Drink Containers/Bags', 'Landfill', 'PET', 'HDPE'],
       description: RichText(
         text: TextSpan(
           text: 'Plastics can be recycled into new products. ',
@@ -88,13 +88,13 @@ class TrashInformationModel {
       color: Color(0xff76CAFF),
       icon: Icons.local_drink,
       markerPath: 'assets/images/marker_plastic.png',
-      trashLoc: [LatLng(13.792141, 100.319698), LatLng(13.792003, 100.319754), LatLng(16.812177081501815, 100.32020415352586)],
-    ));
+      trashLoc: [LatLng(13.792141, 100.319698), LatLng(13.792003, 100.319754), LatLng(16.812177081501815, 100.32020415352586), LatLng(13.794937853258162, 100.32473188114231), LatLng(13.7942978, 100.3244562), LatLng(13.7946195, 100.3239858), LatLng(13.7946029, 100.3239583), LatLng(13.79473, 100.32435)],
+    )); // GeneralW
 
     categories.add(TrashInformationModel(
       id: 2,
       name: 'Paper',
-      tags: ['Recyclable', 'Cardboard', 'Newspaper'],
+      tags: ['Recycle', 'General', 'Dirty Food/Drink Containers/Bags', 'Landfill', 'Cardboard', 'Newspaper'],
       description: RichText(
         text: TextSpan(
           text: 'Paper products can be recycled 5-7 times. ',
@@ -124,7 +124,7 @@ class TrashInformationModel {
             TextSpan(text: 'What NOT to include:\n'),
             TextSpan(
                 text:
-                    '• Waxed paper\n• Thermal receipts\n• Used paper towels\n• Pizza boxes with grease stains\n• Laminated paper\n\n'),
+                    '• Waxed paper\n• Thermal receipts\n• U sed paper towels\n• Pizza boxes with grease stains\n• Laminated paper\n\n'),
             TextSpan(
               text: 'Recycling Benefits:',
               style: TextStyle(fontWeight: FontWeight.bold),
@@ -140,13 +140,13 @@ class TrashInformationModel {
       color: Color(0xff3CB75D),
       icon: Icons.receipt_long,
       markerPath: 'assets/images/marker_paper.png',
-      trashLoc: [LatLng(13.792056, 100.319036), LatLng(13.792981, 100.318814)],
-    ));
+      trashLoc: [LatLng(13.792056, 100.319036), LatLng(13.792981, 100.318814), LatLng(13.794917853258162, 100.32473188114231), LatLng(13.7942978, 100.3244762), LatLng(13.7946195, 100.3240058), LatLng(13.79473, 100.32437)],
+    )); // GeneralW
 
     categories.add(TrashInformationModel(
       id: 3,
       name: 'E-waste',
-      tags: ['Hazardous', 'Electronics', 'Recyclable'],
+      tags: ['Recycle','Landfill', 'Electronics'],
       description: RichText(
         text: TextSpan(
           text: 'E-waste requires special recycling. ',
@@ -190,13 +190,13 @@ class TrashInformationModel {
       color: Color(0xffFFC65C),
       icon: Icons.computer,
       markerPath: 'assets/images/marker_ewaste.png',
-      trashLoc: [LatLng(13.792910, 100.319621), LatLng(13.793183, 100.320301)],
+      trashLoc: [LatLng(13.792910, 100.319621), LatLng(13.793183, 100.320301), LatLng(13.7951376, 100.3244253), LatLng(13.79473, 100.32439)],
     ));
 
     categories.add(TrashInformationModel(
       id: 4,
       name: 'Glass',
-      tags: ['Recyclable', 'Bottles', 'Jars'],
+      tags: ['Recycle', 'General'],
       description: RichText(
         text: TextSpan(
           text: 'Glass can be recycled endlessly. ',
@@ -241,13 +241,13 @@ class TrashInformationModel {
       color: Color(0xff949494),
       icon: Icons.liquor,
       markerPath: 'assets/images/marker_glass.png',
-      trashLoc: [LatLng(13.793404, 100.320103), LatLng(13.793558, 100.319809)],
-    ));
+      trashLoc: [LatLng(13.793404, 100.320103), LatLng(13.793558, 100.319809), LatLng(13.795135977454569, 100.32441483529956), LatLng(13.794897853258162, 100.32473188114231), LatLng(13.7942978, 100.3244962), LatLng(13.7946195, 100.3240258), LatLng(13.79473, 100.32441)],
+    )); // GeneralW
 
     categories.add(TrashInformationModel(
       id: 5,
       name: 'Organic',
-      tags: ['Compostable', 'Food', 'Yard'],
+      tags: ['Compostable', 'Food and Liquid', 'Landfill'],
       description: RichText(
         text: TextSpan(
           text: 'Organic waste can be composted. ',
@@ -298,8 +298,8 @@ class TrashInformationModel {
       color: Color(0xffF3833D),
       icon: Icons.compost,
       markerPath: 'assets/images/marker_organic.png',
-      trashLoc: [LatLng(13.793521, 100.319318), LatLng(13.793644, 100.318778), LatLng(16.812228068148475, 100.32021542452198)],
-    ));
+      trashLoc: [LatLng(13.793521, 100.319318), LatLng(13.793644, 100.318778), LatLng(16.812228068148475, 100.32021542452198), LatLng(13.795137279869573, 100.32443226966421), LatLng(13.794877853258162, 100.32473188114231), LatLng(13.7942978, 100.3245162), LatLng(13.7946195, 100.3240458), LatLng(13.7946029, 100.3239783), LatLng(13.79473, 100.32443)],
+    )); // GeneralW
 
     categories.add(TrashInformationModel(
       id: 6,
@@ -351,13 +351,13 @@ class TrashInformationModel {
       color: Color(0xffFF4F4F),
       icon: Icons.dangerous,
       markerPath: 'assets/images/marker_hazardous.png',
-      trashLoc: [LatLng(13.793449, 100.320687), LatLng(13.792875, 100.320679)],
+      trashLoc: [LatLng(13.793449, 100.320687), LatLng(13.792875, 100.320679), LatLng(13.79473, 100.32445)],
     ));
 
     categories.add(TrashInformationModel(
       id: 7,
       name: 'Metal Waste',
-      tags: ['Recyclable', 'Aluminum', 'Steel'],
+      tags: ['Recycle','General', 'Aluminum', 'Dirty Food/Drink Containers/Bags', 'Landfill', 'Steel'],
       description: RichText(
         text: TextSpan(
           text: 'Metal items like cans can be recycled. ',
@@ -400,8 +400,8 @@ class TrashInformationModel {
       color: Color(0xff505050),
       icon: Icons.fire_extinguisher, // หรือเลือก icon ที่เกี่ยวกับโลหะ
       markerPath: 'assets/images/marker_metal.png',
-      trashLoc: [LatLng(13.793900, 100.319999), LatLng(13.794000, 100.320200)],
-    ));
+      trashLoc: [LatLng(13.793900, 100.319999), LatLng(13.794000, 100.320200), LatLng(13.795136628655094, 100.32444433960836), LatLng(13.79513662866625, 100.32440880032752), LatLng(13.794857853258162, 100.32473188114231), LatLng(13.7942978, 100.3245362), LatLng(13.7946195, 100.3240658), LatLng(13.7946029, 100.3239983), LatLng(13.79473, 100.32447)],
+    )); // GeneralW
 
     return categories;
   }
